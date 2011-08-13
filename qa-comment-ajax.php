@@ -1,5 +1,5 @@
 <?php
 
-$_POST['content'];
+$content = $_POST['content'];
 
-echo 'content returned: '.$_POST['content'];
+echo 'content returned: '.$content;

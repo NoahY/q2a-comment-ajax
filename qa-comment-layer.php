@@ -13,6 +13,21 @@
 			}
 			
 		}
+		
+		// check for post
+		
+		function doctype()
+		{
+			if(isset($_POST['ajax_comment_content'])) $this->output('test');
+			else qa_html_theme_base::doctype();
+		}
+
+		function html()
+		{
+			if(isset($_POST['ajax_comment_content'])) $this->output('ing');
+			else qa_html_theme_base::html();
+		}
+		
 	// theme replacement functions
 
 		function head_script()
@@ -28,12 +43,12 @@
 		}
 		function ajaxPost(idx) {
 			alert(idx);
-			var content = escape(jQuery('textarea#comment'].eq(idx).val());
-			var dataString = 'content='+ content;  
+			var content = escape(jQuery('textarea#comment').eq(idx).val());
+			var dataString = 'ajax_comment_content='+ content;  
 			alert(dataString);
 			jQuery.ajax({  
 			  type: 'POST',  
-			  url: '".QA_HTML_THEME_LAYER_URLTOROOT."qa-comment-ajax.php',  
+			  url: '".qa_self_html."',  
 			  data: dataString,  
 			  success: function(data) {
 				alert(data);  
@@ -157,6 +172,79 @@ $('#contact_form').html("<div id='message'></div>");
 			$form['ajax_comment'] = 1;
 			$this->idx2++;
 			return $form;
+		}
+
+		function qa_page_q_do_comment($answer)
+	/*
+		Process an incoming new comment form for $answer, or question if it is null
+	*/
+		{
+			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
+				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
+			
+			$parent=isset($answer) ? $answer : $question;
+			
+			switch (qa_user_permit_error('permit_post_c', 'C')) {
+				case 'login':
+					$pageerror=qa_insert_login_links(qa_lang_html('question/comment_must_login'), $qa_request);
+					break;
+					
+				case 'confirm':
+					$pageerror=qa_insert_login_links(qa_lang_html('question/comment_must_confirm'), $qa_request);
+					break;
+					
+				case 'limit':
+					$pageerror=qa_lang_html('question/comment_limit');
+					break;
+					
+				default:
+					$pageerror=qa_lang_html('users/no_permission');
+					break;
+					
+				case false:
+					$incomment=qa_post_text('comment');
+		
+					if (!isset($incomment)) {
+						$formtype='c_add';
+						$formpostid=$parent['postid']; // show form first time
+					
+					} else {
+						$innotify=qa_post_text('notify') ? true : false;
+						$inemail=qa_post_text('email');
+		
+						qa_get_post_content('editor', 'comment', $ineditor, $incomment, $informat, $intext);
+		
+						$errors=qa_comment_validate($incomment, $informat, $intext, $innotify, $inemail);
+						
+						if ($usecaptcha)
+							qa_captcha_validate($_POST, $errors);
+		
+						if (empty($errors)) {
+							$isduplicate=false;
+							foreach ($commentsfollows as $comment)
+								if (($comment['basetype']=='C') && ($comment['parentid']==$parent['postid']) && (!$comment['hidden']))
+									if (implode(' ', qa_string_to_words($comment['content'])) == implode(' ', qa_string_to_words($incomment)))
+										$isduplicate=true;
+										
+							if (!$isduplicate) {
+								if (!isset($qa_login_userid))
+									$qa_cookieid=qa_cookie_get_create(); // create a new cookie if necessary
+								
+								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, $answer, $commentsfollows);
+								qa_report_write_action($qa_login_userid, $qa_cookieid, 'c_post', $questionid, @$answer['postid'], $commentid);
+								qa_redirect($qa_request, null, null, null, qa_anchor(isset($answer) ? 'A' : 'Q', $parent['postid']));
+							
+							} else {
+								$pageerror=qa_lang_html('question/duplicate_content');
+							}
+						
+						} else {
+							$formtype='c_add';
+							$formpostid=$parent['postid']; // show form again
+						}
+					}
+					break;
+			}
 		}
 
 	}
