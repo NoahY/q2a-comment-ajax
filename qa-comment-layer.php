@@ -89,7 +89,7 @@ $('#contact_form').html("<div id='message'></div>");
 				if($key === 'comment') {
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
-					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@ && $key === 'comment').' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@$button['tags']).' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
 				}
 				else if ($key == 'cancel' && isset($button['ajax_comment'])) {
