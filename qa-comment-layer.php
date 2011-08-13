@@ -23,7 +23,7 @@
 
 		function html()
 		{
-			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment($_POST['ajax_comment_content'],(isset($_POST['ajax_comment_id'])?$_POST['ajax_comment_id']:false));
+			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment($_POST['ajax_comment_content'],(isset($_POST['ajax_comment_id'])?qa_db_single_select(qa_db_full_post_selectspec(null, $_POST['ajax_comment_id'])):null));
 			else qa_html_theme_base::html();
 		}
 		
@@ -199,9 +199,8 @@
 			return $form;
 		}
 
-		function ajaxPostComment($text,$aid=false)
+		function ajaxPostComment($text,$answer)
 		{
-			$answer = qa_db_single_select(qa_db_full_post_selectspec(null, $aid));
 					
 			require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
 			
