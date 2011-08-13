@@ -1,5 +1,5 @@
 <?php
 
-$return_arr["content"] = $_POST['content'];
+$_POST['content'];
 
-echo json_encode($return_arr);
+echo 'content returned: '.$_POST['content'];

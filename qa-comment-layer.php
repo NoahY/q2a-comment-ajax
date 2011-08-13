@@ -27,8 +27,8 @@
 			jQuery('#ajax-comment-'+idx).show();
 		}
 		function ajaxPost(idx) {
-			alert(name);
-			var content = escape(jQuery('textarea#comment:eq('+idx+')').val());
+			alert(idx);
+			var content = escape(jQuery('textarea#comment'].eq(idx).val());
 			var dataString = 'content='+ content;  
 			alert(dataString);
 			jQuery.ajax({  
@@ -37,7 +37,6 @@
 			  data: dataString,  
 			  success: function(data) {
 				alert(data);  
-				alert(data.content);  
 			  }  
 			}); 
 		}
@@ -86,12 +85,19 @@ $('#contact_form').html("<div id='message'></div>");
 		}		
 		function form_button_data($button, $key, $style)
 		{
-			if (qa_opt('ajax_comment_enable') && $key === 'comment') {
-				
-				$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
-				$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
-				if($style == 'light') $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
-				else $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="ajaxPost('.$this->idx2.')" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+			if (qa_opt('ajax_comment_enable')) {
+				if($key === 'comment') {
+					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
+					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
+					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@ && $key === 'comment').' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
+				}
+				else if ($key == 'cancel' && isset($button['ajax_comment'])) {
+					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
+					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
+					if($style == 'light') $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$button['ajax_comment'].');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');					
+				}
+				else qa_html_theme_base::form_button_data($button, $key, $style);
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
@@ -125,13 +131,15 @@ $('#contact_form').html("<div id='message'></div>");
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.')"',
 						'label' => qa_lang_html('question/add_comment_button'),
+						'ajax_comment' => $this->idx2,
 					),
 					
 					'cancel' => array(
-						'tags' => 'NAME="docancel" onsubmit="toggleComment('.$this->idx.'); return false;"',
+						'tags' => 'NAME="docancel"',
 						'label' => qa_lang_html('main/cancel_button'),
+						'ajax_comment' => $this->idx2,
 					),
 				),
 				
