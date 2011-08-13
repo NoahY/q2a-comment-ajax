@@ -42,8 +42,10 @@
 			$this->output_raw("
 	<script>
 		function toggleComment(idx) {
+			var x = '';
+			if(idx === false) x = 'slow';
 			jQuery('.ajax-comment').attr('disabled', 'disabled');
-			jQuery('.ajax-comment').hide();
+			jQuery('.ajax-comment').hide(x);
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('#ajax-comment-'+idx).fadeIn('slow');
 		}
@@ -69,7 +71,7 @@
 					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').find('div.qa-c-list-item:last').fadeIn('slow');
 					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').fadeIn('slow');
 				}
-				toggleComment();
+				toggleComment(false);
 			  }  
 			});
 		}
