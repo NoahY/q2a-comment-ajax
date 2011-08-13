@@ -43,7 +43,7 @@
 		function ajaxPost(idx,id) {
 			alert(idx);
 			var content = escape(jQuery('textarea#comment').eq(idx).val());
-			var dataString = 'ajax_comment_content='+content+(id?'&ajax_comment_id='+id:'');  
+			var dataString = 'ajax_comment_content='+content+(id?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
 			alert(dataString);
 			jQuery.ajax({  
 			  type: 'POST',  
@@ -173,14 +173,16 @@ $('#contact_form').html("<div id='message'></div>");
 			return $form;
 		}
 
-		function ajaxPostComment($text,$answer)
+		function ajaxPostComment($text,$aid=null)
 		{
+			if($aid) $answer = qa_db_single_select(qa_db_full_post_selectspec(null, $aid));
+					
 			require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
 			
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
-			$parent=isset($answer) ? $answer : $questionid;
+			$parent=isset($aid) ? $aid : $questionid;
 			
 			switch (qa_user_permit_error('permit_post_c', 'C')) {
 				case 'login':
