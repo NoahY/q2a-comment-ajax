@@ -3,6 +3,7 @@
 	class qa_html_theme_layer extends qa_html_theme_base {
 
 		var $idx = 0;
+		var $idx2 = 0;
 
 		function option_default($option) {
 			
@@ -90,7 +91,7 @@ $('#contact_form').html("<div id='message'></div>");
 				$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 				$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
 				if($style == 'light') $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
-				else $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="ajaxPost('.$this->idx.')" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+				else $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="ajaxPost('.$this->idx2.')" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
@@ -146,7 +147,7 @@ $('#contact_form').html("<div id='message'></div>");
 					qa_insert_login_links(qa_lang_html(isset($qa_login_userid) ? 'misc/captcha_confirm_fix' : 'misc/captcha_login_fix')));
 					
 			$form['ajax_comment'] = 1;
-
+			$this->idx2++;
 			return $form;
 		}
 
