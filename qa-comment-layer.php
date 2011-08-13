@@ -243,7 +243,7 @@
 						if ($usecaptcha)
 							qa_captcha_validate($_POST, $errors);
 		
-						if (empty($errors) && !$pageerror) {
+						if (empty($errors)) {
 							$isduplicate=false;
 							foreach ($commentsfollows as $comment)
 								if (($comment['basetype']=='C') && ($comment['parentid']==$parent['postid']) && (!$comment['hidden']))
@@ -265,6 +265,7 @@
 					break;
 			}
 			if($pageerror) $this->output('### '.$pageerror);
+			else if(!empty($errors)) $this->output('### '.implode(',',$errors));
 			else {
 				
 			// return c_item
