@@ -182,7 +182,7 @@ $('#contact_form').html("<div id='message'></div>");
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
-			$parent=isset($aid) ? $aid : $questionid;
+			$parent=$answer ? $answer : $question;
 			
 			switch (qa_user_permit_error('permit_post_c', 'C')) {
 				case 'login':
@@ -207,12 +207,12 @@ $('#contact_form').html("<div id='message'></div>");
 					if (!isset($incomment)) {
 						$pageerror=qa_lang_html('question/comment_limit');
 					} else {
+						$intext=$text;
 						$innotify=qa_post_text('notify') ? true : false;
 						$inemail=qa_post_text('email');
+						$informat = '';
 		
-						qa_get_post_content('editor', 'comment', $ineditor, $incomment, $informat, $intext);
-		
-						$errors=qa_comment_validate($incomment, $informat, $intext, $innotify, $inemail);
+						$errors=qa_comment_validate($incomment, '', $intext, $innotify, $inemail);
 						
 						if ($usecaptcha)
 							qa_captcha_validate($_POST, $errors);
@@ -220,7 +220,7 @@ $('#contact_form').html("<div id='message'></div>");
 						if (empty($errors)) {
 							$isduplicate=false;
 							foreach ($commentsfollows as $comment)
-								if (($comment['basetype']=='C') && ($comment['parentid']==$parent) && (!$comment['hidden']))
+								if (($comment['basetype']=='C') && ($comment['parentid']==$parent['postid']) && (!$comment['hidden']))
 									if (implode(' ', qa_string_to_words($comment['content'])) == implode(' ', qa_string_to_words($incomment)))
 										$isduplicate=true;
 										
