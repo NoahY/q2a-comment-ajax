@@ -53,7 +53,7 @@
 		function ajaxPost(idx,id) {
 
 			var content = escape(jQuery('textarea#comment').eq(idx).val());
-			var dataString = 'ajax_comment_content='+content+(id?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
+			var dataString = 'ajax_comment_content='+content+(id!==false?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
 
 			jQuery.ajax({  
 			  type: 'POST',  
@@ -164,7 +164,7 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:0).')"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:false).')"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => $this->idx2,
 					),
