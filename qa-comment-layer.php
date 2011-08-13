@@ -14,21 +14,21 @@
 
 		function q_view_content($q_view)
 		{
-			qa_html_theme_base::q_view_content($q_view);
 			if (qa_opt('ajax_comment_enable')) {
 				require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
 				
 				if (!empty($q_view['content'])){
-					$this->output(qa_page_q_add_c_form());
+					$q_view["c_list"][] = qa_page_q_add_c_form(null);
 				}
 			}
+			qa_html_theme_base::q_view_content($q_view);
 		}
 		function a_item_content($a_item)
 		{
-			qa_html_theme_base::a_item_content($a_item);
 			if (qa_opt('ajax_comment_enable')) {
-				$this->output(qa_page_q_add_c_form($a_item['raw']['postid']));
+				$a_item["c_list"][] = qa_page_q_add_c_form($a_item['raw']['postid']);
 			}
+			qa_html_theme_base::a_item_content($a_item);
 		}
 
 	}
