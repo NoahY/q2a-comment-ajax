@@ -18,13 +18,12 @@
 		
 		function doctype()
 		{
-			if(isset($_POST['ajax_comment_content'])) $this->output('test');
-			else qa_html_theme_base::doctype();
+			if(!isset($_POST['ajax_comment_content'])) qa_html_theme_base::doctype();
 		}
 
 		function html()
 		{
-			if(isset($_POST['ajax_comment_content'])) $this->output('ing');
+			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment($_POST['ajax_comment_content'],(isset($_POST['ajax_comment_id'])?$_POST['ajax_comment_id']:null));
 			else qa_html_theme_base::html();
 		}
 		
@@ -41,10 +40,10 @@
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('#ajax-comment-'+idx).show();
 		}
-		function ajaxPost(idx) {
+		function ajaxPost(idx,id) {
 			alert(idx);
 			var content = escape(jQuery('textarea#comment').eq(idx).val());
-			var dataString = 'ajax_comment_content='+ content;  
+			var dataString = 'ajax_comment_content='+content+(id?'&ajax_comment_id='+id:'');  
 			alert(dataString);
 			jQuery.ajax({  
 			  type: 'POST',  
@@ -110,7 +109,7 @@ $('#contact_form').html("<div id='message'></div>");
 				else if ($key == 'cancel' && isset($button['ajax_comment'])) {
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
-					if($style == 'light') $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$button['ajax_comment'].');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');					
+					$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$button['ajax_comment'].');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');					
 				}
 				else qa_html_theme_base::form_button_data($button, $key, $style);
 			}
@@ -146,7 +145,7 @@ $('#contact_form').html("<div id='message'></div>");
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.')"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.$answerid.')"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => $this->idx2,
 					),
@@ -174,15 +173,12 @@ $('#contact_form').html("<div id='message'></div>");
 			return $form;
 		}
 
-		function qa_page_q_do_comment($answer)
-	/*
-		Process an incoming new comment form for $answer, or question if it is null
-	*/
+		function ajaxPostComment($text,$answer)
 		{
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
-			$parent=isset($answer) ? $answer : $question;
+			$parent=isset($answer) ? $answer : $questionid;
 			
 			switch (qa_user_permit_error('permit_post_c', 'C')) {
 				case 'login':
@@ -206,7 +202,7 @@ $('#contact_form').html("<div id='message'></div>");
 		
 					if (!isset($incomment)) {
 						$formtype='c_add';
-						$formpostid=$parent['postid']; // show form first time
+						$formpostid=$parent; // show form first time
 					
 					} else {
 						$innotify=qa_post_text('notify') ? true : false;
@@ -222,7 +218,7 @@ $('#contact_form').html("<div id='message'></div>");
 						if (empty($errors)) {
 							$isduplicate=false;
 							foreach ($commentsfollows as $comment)
-								if (($comment['basetype']=='C') && ($comment['parentid']==$parent['postid']) && (!$comment['hidden']))
+								if (($comment['basetype']=='C') && ($comment['parentid']==$parent) && (!$comment['hidden']))
 									if (implode(' ', qa_string_to_words($comment['content'])) == implode(' ', qa_string_to_words($incomment)))
 										$isduplicate=true;
 										
@@ -232,19 +228,16 @@ $('#contact_form').html("<div id='message'></div>");
 								
 								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, $answer, $commentsfollows);
 								qa_report_write_action($qa_login_userid, $qa_cookieid, 'c_post', $questionid, @$answer['postid'], $commentid);
-								qa_redirect($qa_request, null, null, null, qa_anchor(isset($answer) ? 'A' : 'Q', $parent['postid']));
 							
 							} else {
 								$pageerror=qa_lang_html('question/duplicate_content');
 							}
-						
-						} else {
-							$formtype='c_add';
-							$formpostid=$parent['postid']; // show form again
-						}
+						} 
 					}
 					break;
 			}
+			$this->output($page_error);
+			$this->output('success?');
 		}
 
 	}
