@@ -236,7 +236,7 @@ $('#contact_form').html("<div id='message'></div>");
 					}
 					break;
 			}
-			$this->output($page_error);
+			$this->output($pageerror);
 			$this->output('success?');
 		}
 
