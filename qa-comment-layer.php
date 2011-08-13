@@ -20,7 +20,6 @@
 			$this->output_raw("
 	<script>
 		function toggleComment(idx) {
-			jQuery('input[name^=docomment]').submit(false);
 			jQuery('.ajax-comment').attr('disabled', 'disabled');
 			jQuery('.ajax-comment').hide();
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
@@ -53,7 +52,7 @@
 			if (!empty($form)) {
 				if(isset($form['ajax_comment'])) {
 					unset($form['ajax_comment']);
-					$this->output('<div class="ajax-comment" id="ajax-comment-'.($this->idx++).'">');
+					$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
 				
 					qa_html_theme_base::form($form);
 					
