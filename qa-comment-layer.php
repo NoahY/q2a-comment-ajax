@@ -255,7 +255,7 @@ $('#contact_form').html("<div id='message'></div>");
 				
 		}
 
-		function qa_page_q_comment_follow_list($parent,$cid)
+		function ajaxCommentCreate($parent,$cid)
 	/*
 		Return a theme-ready structure with all the comments and follow-on questions to show for post $parent (question or answer)
 	*/
