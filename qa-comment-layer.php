@@ -19,11 +19,12 @@
 			qa_html_theme_base::head_script();
 			$this->output_raw("
 	<script>
+		jQuery('document').ready(function(){jQuery('textarea#comment').submit(false)});
 		function toggleComment(idx) {
-			jQuery('textarea.comment').attr('disabled', 'disabled');
-			jQuery('textarea.comment').hide();
-			jQuery('textarea.comment:eq(idx)').attr('disabled', 'disabled');
-			jQuery('textarea.comment:eq(idx)').show();
+			jQuery('textarea#comment').attr('disabled', 'disabled');
+			jQuery('textarea#comment').hide();
+			jQuery('textarea#comment:eq(idx)').attr('disabled', 'disabled');
+			jQuery('textarea#comment:eq(idx)').show();
 			return false;
 		}
 	</script>");
@@ -53,7 +54,7 @@
 				
 				$button['tags'].=' onclick="jQuery(\'this\').submit(false); toggleComment('.$this->idx++.');"';
 			}
-			qa_html_theme_base::a_item_main($button, $key, $style);
+			qa_html_theme_base::form_button_data($button, $key, $style);
 		}
 		
 		function qa_page_q_add_c_form($answerid)
