@@ -12,7 +12,7 @@
 		}
 	// theme replacement functions
 
-		function q_view_content($q_view)
+		function q_view_main($q_view)
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				
@@ -20,14 +20,14 @@
 					$q_view["c_list"][] = $this->qa_page_q_add_c_form(null);
 				}
 			}
-			qa_html_theme_base::q_view_content($q_view);
+			qa_html_theme_base::q_view_main($q_view);
 		}
-		function a_item_content($a_item)
+		function a_item_main($a_item)
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				$a_item["c_list"][] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
 			}
-			qa_html_theme_base::a_item_content($a_item);
+			qa_html_theme_base::a_item_main($a_item);
 		}
 
 		function qa_page_q_add_c_form($answerid)
