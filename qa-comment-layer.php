@@ -16,11 +16,10 @@
 		{
 			qa_html_theme_base::q_view_content($q_view);
 			if (qa_opt('ajax_comment_enable')) {
-				qa_error_log($this->content['raw']['postid']);
-				qa_error_log(qa_page_q_add_c_form($this->content['raw']['postid']));
+				require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
 				
 				if (!empty($q_view['content'])){
-					$this->output(qa_page_q_add_c_form($this->content['raw']['postid']));
+					$this->output(qa_page_q_add_c_form());
 				}
 			}
 		}
@@ -28,7 +27,7 @@
 		{
 			qa_html_theme_base::a_item_content($a_item);
 			if (qa_opt('ajax_comment_enable')) {
-					$this->output(qa_page_q_add_c_form($this->content['raw']['postid']));
+				$this->output(qa_page_q_add_c_form($a_item['raw']['postid']));
 			}
 		}
 
