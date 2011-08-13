@@ -41,20 +41,26 @@
 			jQuery('#ajax-comment-'+idx).show();
 		}
 		function ajaxPost(idx,id) {
-			alert(idx);
+
 			var content = escape(jQuery('textarea#comment').eq(idx).val());
 			var dataString = 'ajax_comment_content='+content+(id?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
-			alert(dataString);
+
 			jQuery.ajax({  
 			  type: 'POST',  
-			  url: '".qa_self_html()."',  
+			  url: '../1/this-is-a-test',  
 			  data: dataString,  
 			  success: function(data) {
-				if(!idx) jQuery('div.qa-q-view-c-list').replaceWith(data);
-				else jQuery('div.qa-a-item-c-list').eq(idx).replaceWith(data);
-				alert(data);  
+				if(!idx) {
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery(data).insertBefore('.qa-q-view-main .ajax-comment');
+					else jQuery('.qa-q-view-c-list').replaceWith(data);
+				}
+				else {
+					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery(data).insertBefore('.ajax-comment:eq('+idx+')');
+					else jQuery('.qa-a-item-c-list').eq(idx-1).replaceWith(data);
+				}
+				alert(idx);  
 			  }  
-			}); 
+			});
 		}
 	</script>");
 		}
