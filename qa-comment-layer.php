@@ -164,7 +164,7 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:false).')"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:'false').')"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => $this->idx2,
 					),
