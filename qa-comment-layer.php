@@ -52,14 +52,15 @@
 		{
 			if (!empty($form)) {
 				if(isset($form['ajax_comment'])) {
-
-						$this->output('<div class="ajax-comment" id="ajax-comment-'.($this->idx++).'">');
+					unset($form['ajax_comment']);
+					$this->output('<div class="ajax-comment" id="ajax-comment-'.($this->idx++).'">');
+				
+					qa_html_theme_base::form($form);
 					
-						qa_html_theme_base::form($form);
-						
-						$this->output('</div>');
+					$this->output('</div>');
+				}
+				else qa_html_theme_base::form($form);
 			}
-			else qa_html_theme_base::form($form);
 		}		
 		function form_button_data($button, $key, $style)
 		{
