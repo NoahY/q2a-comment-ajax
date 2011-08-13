@@ -47,7 +47,7 @@
 			jQuery('.ajax-comment').attr('disabled', 'disabled');
 			jQuery('.ajax-comment').hide(x);
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
-			jQuery('#ajax-comment-'+idx).fadeIn('slow');
+			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).fadeIn('slow');
 		}
 		function ajaxPost(idx,id) {
 
@@ -308,7 +308,9 @@
 					'tags' => 'NAME="doclaimc_'.qa_html($cid).'"',
 					'label' => qa_lang_html('question/claim_button'),
 				);
-				
+			
+			$parent['commentbutton']=($permiterror_post_c!='level') &&	qa_opt(($post['type']=='Q') ? 'comment_on_qs' : 'comment_on_as');
+							
 			if ($parent['commentbutton'] && qa_opt('show_c_reply_buttons') && !$comment['hidden'])
 				$c_view['form']['buttons']['comment']=array(
 					'tags' => 'NAME="'.(($parent['basetype']=='Q') ? 'docommentq' : ('docommenta_'.qa_html($parent['postid']))).'"',
