@@ -17,7 +17,7 @@
 			if (qa_opt('ajax_comment_enable')) {
 				
 				if (!empty($q_view['content'])){
-					$q_view["c_list"][] = $this->qa_page_q_add_c_form(null);
+					$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
 				}
 			}
 			qa_html_theme_base::q_view_main($q_view);
@@ -25,7 +25,7 @@
 		function a_item_main($a_item)
 		{
 			if (qa_opt('ajax_comment_enable')) {
-				$a_item["c_list"][] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
+				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
 			}
 			qa_html_theme_base::a_item_main($a_item);
 		}
