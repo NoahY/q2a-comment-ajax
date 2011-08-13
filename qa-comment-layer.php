@@ -47,7 +47,7 @@
 			alert(dataString);
 			jQuery.ajax({  
 			  type: 'POST',  
-			  url: '".qa_self_html."',  
+			  url: '".qa_self_html()."',  
 			  data: dataString,  
 			  success: function(data) {
 				alert(data);  
