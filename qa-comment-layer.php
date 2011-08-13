@@ -63,12 +63,13 @@
 				}
 				else if(!idx) {
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').show('slow');
-					else jQuery('.qa-q-view-c-list').append(data).show('slow');
+					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow');
 				}
 				else {
 					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').show('slow');
-					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).show('slow');
+					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').show('slow');
 				}
+				toggleComment();
 			  }  
 			});
 		}
