@@ -275,55 +275,24 @@ $('#contact_form').html("<div id='message'></div>");
 				'style' => 'light',
 				'buttons' => array(),
 			);
-		
-			if ($comment['editbutton'])
-				$c_view['form']['buttons']['edit']=array(
-					'tags' => 'NAME="doeditc_'.qa_html($cid).'"',
-					'label' => qa_lang_html('question/edit_button'),
-					'popup' => qa_lang_html('question/edit_c_popup'),
-				);
-				
-			if ($comment['flagbutton'])
-				$c_view['form']['buttons']['flag']=array(
-					'tags' => 'NAME="doflagc_'.qa_html($cid).'"',
-					'label' => qa_lang_html($cid['flagtohide'] ? 'question/flag_hide_button' : 'question/flag_button'),
-					'popup' => qa_lang_html('question/flag_c_popup'),
-				);
-			
-			if ($comment['unflaggable'])
-				$c_view['form']['buttons']['unflag']=array(
-					'tags' => 'NAME="dounflagc_'.qa_html($cid).'"',
-					'label' => qa_lang_html('question/unflag_button'),
-					'popup' => qa_lang_html('question/unflag_popup'),
-				);
-				
-			if ($comment['clearflaggable'])
-				$c_view['form']['buttons']['clearflags']=array(
-					'tags' => 'NAME="doclearflagsc_'.qa_html($cid).'"',
-					'label' => qa_lang_html('question/clear_flags_button'),
-					'popup' => qa_lang_html('question/clear_flags_popup'),
-				);
 
+			$c_view['form']['buttons']['edit']=array(
+				'tags' => 'NAME="doeditc_'.qa_html($cid).'"',
+				'label' => qa_lang_html('question/edit_button'),
+				'popup' => qa_lang_html('question/edit_c_popup'),
+			);
+				
+			$comment['hideable']=(!$comment['hidden']) && !$permiterror_hide_show;
+			
 			if ($comment['hideable'])
 				$c_view['form']['buttons']['hide']=array(
 					'tags' => 'NAME="dohidec_'.qa_html($cid).'"',
 					'label' => qa_lang_html('question/hide_button'),
 					'popup' => qa_lang_html('question/hide_c_popup'),
 				);
-				
-			if ($comment['reshowable'])
-				$c_view['form']['buttons']['reshow']=array(
-					'tags' => 'NAME="doshowc_'.qa_html($cid).'"',
-					'label' => qa_lang_html('question/reshow_button'),
-				);
-				
-			if ($comment['deleteable'])
-				$c_view['form']['buttons']['delete']=array(
-					'tags' => 'NAME="dodeletec_'.qa_html($cid).'"',
-					'label' => qa_lang_html('question/delete_button'),
-					'popup' => qa_lang_html('question/delete_c_popup'),
-				);
-				
+
+			$comment['claimable']=(!isset($comment['userid'])) && isset($qa_login_userid) && (strcmp(@$comment['cookieid'], $qa_cookieid)==0) && !$permiterror_post_c;
+
 			if ($comment['claimable'])
 				$c_view['form']['buttons']['claim']=array(
 					'tags' => 'NAME="doclaimc_'.qa_html($cid).'"',
