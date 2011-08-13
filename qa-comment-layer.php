@@ -14,7 +14,6 @@
 		}
 	// theme replacement functions
 
-.removeAttr('disabled');
 		function head_script()
 		{
 			qa_html_theme_base::head_script();
