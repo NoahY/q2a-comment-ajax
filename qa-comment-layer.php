@@ -21,10 +21,10 @@
 	<script>
 		function toggleComment(idx) {
 			jQuery('input[name^=docomment]').submit(false);
-			jQuery('textarea#comment').attr('disabled', 'disabled');
-			jQuery('textarea#comment').hide();
-			jQuery('textarea#comment').eq(idx).removeAttr('disabled');
-			jQuery('textarea#comment').eq(idx).show();
+			jQuery('.ajax-comment').attr('disabled', 'disabled');
+			jQuery('.ajax-comment').hide();
+			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
+			jQuery('#ajax-comment-'+idx).show();
 		}
 	</script>");
 		}
@@ -36,6 +36,7 @@
 				if (!empty($q_view['content'])){
 					$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
 				}
+				$this->idx++;
 			}
 			qa_html_theme_base::q_view_main($q_view);
 		}
@@ -43,17 +44,31 @@
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
+				$this->idx++;
 			}
 			qa_html_theme_base::a_item_main($a_item);
 		}
-		
+		function form($form)
+		{
+			if (!empty($form)) {
+				if(isset($form['ajax_comment'])) {
+
+						$this->output('<div class="ajax-comment" id="ajax-comment-'.($this->idx++).'">');
+					
+						qa_html_theme_base::form($form);
+						
+						$this->output('</div>');
+			}
+			else qa_html_theme_base::form($form);
+		}		
 		function form_button_data($button, $key, $style)
 		{
-			if($key == 'comment') {
-			$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
-			$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
-			
-			$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx++.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');				
+			if (qa_opt('ajax_comment_enable') && $key == 'comment') {
+				
+				$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
+				$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
+				
+				$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
@@ -101,7 +116,6 @@
 					'editor' => qa_html($editorname),
 				),
 			);
-
 			qa_set_up_notify_fields($qa_content, $form['fields'], 'C', qa_get_logged_in_email(),
 				isset($innotify) ? $innotify : qa_opt('notify_users_default'), @$inemail, @$errors['email']);
 			
@@ -109,6 +123,8 @@
 				qa_set_up_captcha_field($qa_content, $form['fields'], @$errors,
 					qa_insert_login_links(qa_lang_html(isset($qa_login_userid) ? 'misc/captcha_confirm_fix' : 'misc/captcha_login_fix')));
 					
+			$form['ajax_comment'] = 1;
+
 			return $form;
 		}
 
