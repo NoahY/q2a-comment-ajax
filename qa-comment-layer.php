@@ -54,9 +54,9 @@
 
 			var content = jQuery('textarea[name=\"comment\"]').eq(idx).val();
 			var oldcss = jQuery('textarea[name=\"comment\"]').eq(idx).css('background');
-			var notify = jQuery('#ajax-comment-'+idx+' input[name=\"notify\"]').attr('checked');
-			var email = jQuery('#ajax-comment-'+idx+' input[name=\"email\"]').val();
-			var editor = jQuery('#ajax-comment-'+idx+' input[name=\"editor\"]').val();
+			var notify = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"notify\"]').attr('checked');
+			var email = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"email\"]').val();
+			var editor = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"editor\"]').val();
 			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
 			
