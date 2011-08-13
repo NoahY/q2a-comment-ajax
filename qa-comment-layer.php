@@ -23,8 +23,8 @@
 			jQuery('input[name^=docomment]').submit(false);
 			jQuery('textarea#comment').attr('disabled', 'disabled');
 			jQuery('textarea#comment').hide();
-			jQuery('textarea#comment:eq(idx)').attr('disabled', 'disabled');
-			jQuery('textarea#comment:eq(idx)').show();
+			jQuery('textarea#comment').eq(idx).removeAttr('disabled');
+			jQuery('textarea#comment').eq(idx).show();
 		}
 	</script>");
 		}
