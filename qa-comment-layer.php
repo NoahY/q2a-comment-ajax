@@ -45,7 +45,7 @@
 			jQuery('.ajax-comment').attr('disabled', 'disabled');
 			jQuery('.ajax-comment').hide();
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
-			jQuery('#ajax-comment-'+idx).show();
+			jQuery('#ajax-comment-'+idx).fadeIn('slow');
 		}
 		function ajaxPost(idx,id) {
 
@@ -62,12 +62,12 @@
 					window.alert(error);
 				}
 				else if(!idx) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').show('slow');
-					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow');
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').fadeIn('slow');
+					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').fadeIn('slow');
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').show('slow');
-					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').show('slow');
+					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').find('div.qa-c-list-item:last').fadeIn('slow');
+					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').fadeIn('slow');
 				}
 				toggleComment();
 			  }  
@@ -194,7 +194,7 @@
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
-			$parent=$answer ? $answer : $question;
+			$parent=isset($answer) ? $answer : $question;
 			
 			switch (qa_user_permit_error('permit_post_c', 'C')) {
 				case 'login':
@@ -290,7 +290,7 @@
 				'popup' => qa_lang_html('question/edit_c_popup'),
 			);
 				
-			$comment['hideable']=(!$comment['hidden']) && !$permiterror_hide_show;
+			$comment['hideable']=(!$comment['hidden']) && !qa_user_permit_error($post['isbyuser'] ? null : 'permit_hide_show');
 			
 			if ($comment['hideable'])
 				$c_view['form']['buttons']['hide']=array(
