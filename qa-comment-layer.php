@@ -247,7 +247,7 @@
 								if (!isset($qa_login_userid))
 									$qa_cookieid=qa_cookie_get_create(); // create a new cookie if necessary
 								
-								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, (isset($answer) ? $answer : null), $commentsfollows);
+								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, $answer, $commentsfollows);
 								qa_report_write_action($qa_login_userid, $qa_cookieid, 'c_post', $questionid, @$answer['postid'], $commentid);
 							
 							} else {
@@ -296,8 +296,8 @@
 				'label' => qa_lang_html('question/edit_button'),
 				'popup' => qa_lang_html('question/edit_c_popup'),
 			);
-				
-			$comment['hideable']=(!$comment['hidden']) && !qa_user_permit_error($comment['isbyuser'] ? null : 'permit_hide_show');
+
+			$comment['hideable']=(!$comment['hidden']) && !qa_user_permit_error('permit_hide_show');
 			
 			if ($comment['hideable'])
 				$c_view['form']['buttons']['hide']=array(
