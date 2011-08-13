@@ -97,7 +97,6 @@
 				if (!empty($q_view['content'])){
 					$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
 				}
-				$this->idx++;
 			}
 			qa_html_theme_base::q_view_main($q_view);
 		}
@@ -105,7 +104,6 @@
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
-				$this->idx++;
 			}
 			qa_html_theme_base::a_item_main($a_item);
 		}
