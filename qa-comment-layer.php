@@ -57,7 +57,7 @@
 			  url: '../1/this-is-a-test',  
 			  data: dataString,  
 			  success: function(data) {
-				if(/^###/.exec(data) {
+				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
 				}
