@@ -194,7 +194,6 @@
 
 		function ajaxPostComment($text,$aid=null)
 		{
-			$answer = array();
 			if($aid) $answer = qa_db_single_select(qa_db_full_post_selectspec(null, $aid));
 					
 			require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
@@ -202,7 +201,7 @@
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
-			$parent=!empty($answer) ? $answer : $question;
+			$parent=isset($answer) ? $answer : $question;
 			
 			switch (qa_user_permit_error('permit_post_c', 'C')) {
 				case 'login':
@@ -248,7 +247,7 @@
 								if (!isset($qa_login_userid))
 									$qa_cookieid=qa_cookie_get_create(); // create a new cookie if necessary
 								
-								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, $answer, $commentsfollows);
+								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, (isset($answer) ? $answer : array()), $commentsfollows);
 								qa_report_write_action($qa_login_userid, $qa_cookieid, 'c_post', $questionid, @$answer['postid'], $commentid);
 							
 							} else {
@@ -315,7 +314,7 @@
 					'label' => qa_lang_html('question/claim_button'),
 				);
 			
-			$parent['commentbutton']=(qa_user_permit_error('permit_post_c')!='level') &&	qa_opt(($comment['type']=='Q') ? 'comment_on_qs' : 'comment_on_as');
+			$parent['commentbutton']=(qa_user_permit_error('permit_post_c')!='level') && qa_opt(($comment['type']=='Q') ? 'comment_on_qs' : 'comment_on_as');
 							
 			if ($parent['commentbutton'] && qa_opt('show_c_reply_buttons') && !$comment['hidden'])
 				$c_view['form']['buttons']['comment']=array(
