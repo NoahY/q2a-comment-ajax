@@ -52,10 +52,10 @@
 		}
 		function ajaxPost(idx,id) {
 
-			var content = jQuery('textarea#comment').eq(idx).val();
-			var oldcss = jQuery('textarea#comment').eq(idx).css('background');
-			jQuery('textarea#comment').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
-			jQuery('textarea#comment').eq(idx).val('');
+			var content = jQuery('textarea[name=\"comment\"]').eq(idx).val();
+			var oldcss = jQuery('textarea[name=\"comment\"]').eq(idx).css('background');
+			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
+			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
 			
 			var dataString = 'ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
 
@@ -67,7 +67,7 @@
 				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
-					jQuery('textarea#comment').eq(idx).val(content);
+					jQuery('textarea[name=\"comment\"]').eq(idx).val(content);
 				}
 				else if(!idx) {
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').fadeIn('slow');
@@ -79,7 +79,7 @@
 					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').fadeIn('slow');
 					toggleComment(false);
 				}
-				jQuery('textarea#comment').eq(idx).css('background',oldcss);
+				jQuery('textarea[name=\"comment\"]').eq(idx).css('background',oldcss);
 			  }  
 			});
 		}
