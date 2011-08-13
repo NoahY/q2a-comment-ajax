@@ -16,6 +16,9 @@
 		{
 			qa_html_theme_base::q_view_content($q_view);
 			if (qa_opt('ajax_comment_enable')) {
+				qa_error_log($this->content['raw']['postid']);
+				qa_error_log(qa_page_q_add_c_form($this->content['raw']['postid']));
+				
 				if (!empty($q_view['content'])){
 					$this->output(qa_page_q_add_c_form($this->content['raw']['postid']));
 				}
