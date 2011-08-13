@@ -50,6 +50,8 @@
 			  url: '".qa_self_html()."',  
 			  data: dataString,  
 			  success: function(data) {
+				if(!idx) jQuery('div.qa-q-view-c-list').replaceWith(data);
+				else jQuery('div.qa-a-item-c-list').eq(idx).replaceWith(data);
 				alert(data);  
 			  }  
 			}); 
@@ -238,9 +240,17 @@ $('#contact_form').html("<div id='message'></div>");
 					}
 					break;
 			}
-			$this->output($pageerror);
-			$this->output('success?');
+			if($pageerror) $this->output('### '.$pageerror);
+			else {
+				
+			// create c_list
+				
+				$c_list = qa_page_q_comment_follow_list($parent);
+				$class = ($aid?'qa-a-item':'qa-q-view');
+				$this->c_list($c_list,$class);
+			}
+				
 		}
-
+				
 	}
 
