@@ -52,12 +52,12 @@
 		}
 		function ajaxPost(idx,id) {
 
-			var content = escape(jQuery('textarea#comment').eq(idx).val());
+			var content = jQuery('textarea#comment').eq(idx).val();
 			var oldcss = jQuery('textarea#comment').eq(idx).css('background');
 			jQuery('textarea#comment').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			jQuery('textarea#comment').eq(idx).val('');
 			
-			var dataString = 'ajax_comment_content='+content+(id!==false?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
+			var dataString = 'ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
 
 			jQuery.ajax({  
 			  type: 'POST',  
