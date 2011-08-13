@@ -247,7 +247,7 @@
 								if (!isset($qa_login_userid))
 									$qa_cookieid=qa_cookie_get_create(); // create a new cookie if necessary
 								
-								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, (isset($answer) ? $answer : array()), $commentsfollows);
+								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, (isset($answer) ? $answer : null), $commentsfollows);
 								qa_report_write_action($qa_login_userid, $qa_cookieid, 'c_post', $questionid, @$answer['postid'], $commentid);
 							
 							} else {
