@@ -243,7 +243,7 @@
 						if ($usecaptcha)
 							qa_captcha_validate($_POST, $errors);
 		
-						if (empty($errors)) {
+						if (empty($errors) && !$pageerror) {
 							$isduplicate=false;
 							foreach ($commentsfollows as $comment)
 								if (($comment['basetype']=='C') && ($comment['parentid']==$parent['postid']) && (!$comment['hidden']))
