@@ -84,7 +84,7 @@ $('#contact_form').html("<div id='message'></div>");
 		}		
 		function form_button_data($button, $key, $style)
 		{
-			if (qa_opt('ajax_comment_enable') && $key == 'comment' && $style == 'light') {
+			if (qa_opt('ajax_comment_enable') && $key == 'comment') {
 				
 				$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 				$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
