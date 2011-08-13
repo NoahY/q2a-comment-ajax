@@ -194,6 +194,7 @@
 
 		function ajaxPostComment($text,$aid=null)
 		{
+			$answer = array();
 			if($aid) $answer = qa_db_single_select(qa_db_full_post_selectspec(null, $aid));
 					
 			require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
@@ -201,7 +202,7 @@
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
-			$parent=isset($answer) ? $answer : $question;
+			$parent=!empty($answer) ? $answer : $question;
 			
 			switch (qa_user_permit_error('permit_post_c', 'C')) {
 				case 'login':
@@ -297,7 +298,7 @@
 				'popup' => qa_lang_html('question/edit_c_popup'),
 			);
 				
-			$comment['hideable']=(!$comment['hidden']) && !qa_user_permit_error($post['isbyuser'] ? null : 'permit_hide_show');
+			$comment['hideable']=(!$comment['hidden']) && !qa_user_permit_error($comment['isbyuser'] ? null : 'permit_hide_show');
 			
 			if ($comment['hideable'])
 				$c_view['form']['buttons']['hide']=array(
@@ -314,7 +315,7 @@
 					'label' => qa_lang_html('question/claim_button'),
 				);
 			
-			$parent['commentbutton']=($permiterror_post_c!='level') &&	qa_opt(($post['type']=='Q') ? 'comment_on_qs' : 'comment_on_as');
+			$parent['commentbutton']=(qa_user_permit_error('permit_post_c')!='level') &&	qa_opt(($comment['type']=='Q') ? 'comment_on_qs' : 'comment_on_as');
 							
 			if ($parent['commentbutton'] && qa_opt('show_c_reply_buttons') && !$comment['hidden'])
 				$c_view['form']['buttons']['comment']=array(
