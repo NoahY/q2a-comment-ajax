@@ -54,10 +54,12 @@
 
 			var content = jQuery('textarea[name=\"comment\"]').eq(idx).val();
 			var oldcss = jQuery('textarea[name=\"comment\"]').eq(idx).css('background');
+			var notify = jQuery('#ajax-comment-'+idx+' input[name=\"notify\"]').attr('checked');
+			var email = jQuery('#ajax-comment-'+idx+' input[name=\"email\"]').val();
 			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
 			
-			var dataString = 'ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
+			var dataString = 'ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+'&notify='+notify+'&email='+email;  
 
 			jQuery.ajax({  
 			  type: 'POST',  
@@ -228,12 +230,11 @@
 					break;
 					
 				case false:
-					$incomment=$text;
+					$incomment=$this->ajaxEditor($text);
 		
 					if (!isset($incomment)) {
 						$pageerror=qa_lang_html('question/comment_limit');
 					} else {
-						$intext=$text;
 						$innotify=qa_post_text('notify') ? true : false;
 						$inemail=qa_post_text('email');
 						$informat = '';
@@ -275,6 +276,16 @@
 				
 			}
 				
+		}
+		
+		function ajaxEditor($ineditor) {
+			$editor=qa_load_module('editor', $ineditor);
+			$readdata=$editor->read_post($contentfield);
+			$incontent=$readdata['content'];
+			$informat=$readdata['format'];
+
+			$viewer=qa_load_viewer($incontent, $informat);
+			$intext=$viewer->get_text($incontent, $informat, array());
 		}
 		
 		function ajaxCommentCreate($parent,$cid)
