@@ -1,5 +1,5 @@
 <?php
-    class qa_embed_admin {
+    class qa_ajax_comment_admin {
 	function option_default($option) {
 	    switch($option) {
 	    default:
