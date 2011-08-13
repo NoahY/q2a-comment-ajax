@@ -60,7 +60,7 @@
 			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
 			
-			var dataString = 'ajax_id='+idx+'&ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
+			var dataString = 'ajax_id='+(idx+1)+'&ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
 
 			jQuery.ajax({  
 			  type: 'POST',  
