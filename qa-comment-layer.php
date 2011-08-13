@@ -61,7 +61,7 @@
 
 			jQuery.ajax({  
 			  type: 'POST',  
-			  url: '../1/this-is-a-test',  
+			  url: '".qa_self_html()."',  
 			  data: dataString,  
 			  success: function(data) {
 				if(/^###/.exec(data)) {
