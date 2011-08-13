@@ -51,13 +51,11 @@
 			  data: dataString,  
 			  success: function(data) {
 				if(!idx) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">
-'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment');
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment');
 					else jQuery('.qa-q-view-c-list').append(data);
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">
-'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')');
+					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')');
 					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data);
 				}
 			  }  
@@ -154,7 +152,7 @@ $('#contact_form').html("<div id='message'></div>");
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.$answerid.')"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:0).')"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => $this->idx2,
 					),
