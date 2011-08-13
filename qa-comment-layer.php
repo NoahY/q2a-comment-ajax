@@ -88,8 +88,8 @@ $('#contact_form').html("<div id='message'></div>");
 				
 				$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 				$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
-				
-				$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+				if($style == 'light') $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+				else $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="ajaxPost('.$this->idx.')" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
@@ -123,7 +123,7 @@ $('#contact_form').html("<div id='message'></div>");
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onsubmit="ajaxPost('.$this->idx.'); return false;"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'"',
 						'label' => qa_lang_html('question/add_comment_button'),
 					),
 					
