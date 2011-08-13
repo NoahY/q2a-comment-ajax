@@ -21,14 +21,7 @@
 	<script>
 		jQuery('document').ready(
 			function(){
-				jQuery('input[name^=docomment]').submit(
-					function(e){
-						if (e.preventDefault)
-							e.preventDefault();
-						else
-							e.returnValue = false;
-					}
-				);
+				jQuery('input[name^=docomment]').attr('type','button');
 			}
 		);
 		function toggleComment(idx) {
@@ -63,7 +56,7 @@
 		{
 			if($key == 'comment') {
 				
-				$button['tags'].=' onclick="jQuery(\'this\').submit(false); toggleComment('.$this->idx++.');"';
+				$button['tags'].=' onclick="toggleComment('.$this->idx++.');"';
 			}
 			qa_html_theme_base::form_button_data($button, $key, $style);
 		}
