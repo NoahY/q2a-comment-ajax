@@ -32,7 +32,8 @@
 		function head_script()
 		{
 			qa_html_theme_base::head_script();
-			$this->output_raw("
+			if (qa_opt('ajax_comment_enable')) {
+				$this->output_raw("
 	<style>
 		.ajax-comment-hidden {
 			display:none;
@@ -44,8 +45,8 @@
 		function toggleComment(idx) {
 			var x = '';
 			if(idx === false) x = 'slow';
-			jQuery('.ajax-comment').attr('disabled', 'disabled');
-			jQuery('.ajax-comment').hide(x);
+			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
+			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide(x);
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).fadeIn('slow');
 		}
@@ -76,6 +77,7 @@
 			});
 		}
 	</script>");
+			}
 		}
 
 		function q_view_main($q_view)
@@ -99,17 +101,20 @@
 		}
 		function form($form)
 		{
-			if (!empty($form)) {
-				if(isset($form['ajax_comment'])) {
-					unset($form['ajax_comment']);
-					$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
-				
-					qa_html_theme_base::form($form);
+			if (qa_opt('ajax_comment_enable')) {
+				if (!empty($form)) {
+					if(isset($form['ajax_comment'])) {
+						unset($form['ajax_comment']);
+						$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
 					
-					$this->output('</div>');
+						qa_html_theme_base::form($form);
+						
+						$this->output('</div>');
+					}
+					else qa_html_theme_base::form($form);
 				}
-				else qa_html_theme_base::form($form);
 			}
+			else qa_html_theme_base::form($form);
 		}		
 		function form_button_data($button, $key, $style)
 		{
@@ -123,7 +128,7 @@
 				else if ($key == 'cancel' && isset($button['ajax_comment'])) {
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
-					$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$button['ajax_comment'].');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');					
+					$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment(false);" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');					
 				}
 				else qa_html_theme_base::form_button_data($button, $key, $style);
 			}
