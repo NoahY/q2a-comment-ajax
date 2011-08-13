@@ -53,6 +53,10 @@
 		function ajaxPost(idx,id) {
 
 			var content = escape(jQuery('textarea#comment').eq(idx).val());
+			var oldcss = jQuery('textarea#comment').eq(idx).css('background');
+			jQuery('textarea#comment').eq(idx).css('background','url(".."ajax-loader.gif) no-repeat scroll center center white');
+			jQuery('textarea#comment').eq(idx).val('');
+			
 			var dataString = 'ajax_comment_content='+content+(id!==false?'&ajax_comment_id='+id:'')+'&notify=true&email=yuttadhammo@gmail.com';  
 
 			jQuery.ajax({  
@@ -63,16 +67,19 @@
 				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
+					jQuery('textarea#comment').eq(idx).val(content);
 				}
 				else if(!idx) {
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').fadeIn('slow');
 					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').fadeIn('slow');
+					toggleComment(false);
 				}
 				else {
 					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').find('div.qa-c-list-item:last').fadeIn('slow');
 					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').fadeIn('slow');
+					toggleComment(false);
 				}
-				toggleComment(false);
+				jQuery('textarea#comment').eq(idx).css('background',oldcss);
 			  }  
 			});
 		}
