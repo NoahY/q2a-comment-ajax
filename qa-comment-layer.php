@@ -25,8 +25,9 @@
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('#ajax-comment-'+idx).show();
 		}
-		function ajaxPost(idx) {
-			var content = escape(jQuery('textarea#comment').eq(idx).html());
+		function ajaxPost(name) {
+			alert(name);
+			var content = escape(jQuery('textarea[name='+name+']').html());
 			var dataString = 'content='+ content;  
 			alert(dataString);
 			jQuery.ajax({  
@@ -89,7 +90,7 @@ $('#contact_form').html("<div id='message'></div>");
 				$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 				$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
 				if($style == 'light') $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
-				else $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="ajaxPost('.$this->idx.')" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
+				else $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="ajaxPost(this.name)" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
