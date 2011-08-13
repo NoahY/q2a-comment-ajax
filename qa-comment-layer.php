@@ -2,6 +2,8 @@
 
 	class qa_html_theme_layer extends qa_html_theme_base {
 
+		var $idx = 0;
+
 		function option_default($option) {
 			
 			switch($option) {
@@ -11,6 +13,22 @@
 			
 		}
 	// theme replacement functions
+
+.removeAttr('disabled');
+		function head_script()
+		{
+			qa_html_theme_base::head_script();
+			$this->output_raw("
+	<script>
+		function toggleComment(idx) {
+			jQuery('textarea.comment').attr('disabled', 'disabled');
+			jQuery('textarea.comment').hide();
+			jQuery('textarea.comment:eq(idx)').attr('disabled', 'disabled');
+			jQuery('textarea.comment:eq(idx)').show();
+			return false;
+		}
+	</script>");
+		}
 
 		function q_view_main($q_view)
 		{
@@ -29,7 +47,16 @@
 			}
 			qa_html_theme_base::a_item_main($a_item);
 		}
-
+		
+		function form_button_data($button, $key, $style)
+		{
+			if($key == 'comment') {
+				
+				$button['tags'].=' onclick="jQuery(\'this\').submit(false); toggleComment('.$this->idx++.');"';
+			}
+			qa_html_theme_base::a_item_main($button, $key, $style);
+		}
+		
 		function qa_page_q_add_c_form($answerid)
 	/*
 		Return form for adding a comment on $answerid (or the question if $answerid is null), and set up $qa_content accordingly
