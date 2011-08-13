@@ -175,6 +175,8 @@ $('#contact_form').html("<div id='message'></div>");
 
 		function ajaxPostComment($text,$answer)
 		{
+			require_once QA_INCLUDE_DIR.'qa-page-question-post.php';
+			
 			global $qa_login_userid, $qa_cookieid, $question, $questionid, $formtype, $formpostid,
 				$errors, $reloadquestion, $pageerror, $qa_request, $ineditor, $incomment, $informat, $innotify, $inemail, $commentsfollows, $jumptoanchor, $usecaptcha;
 			
@@ -198,12 +200,10 @@ $('#contact_form').html("<div id='message'></div>");
 					break;
 					
 				case false:
-					$incomment=qa_post_text('comment');
+					$incomment=$text;
 		
 					if (!isset($incomment)) {
-						$formtype='c_add';
-						$formpostid=$parent; // show form first time
-					
+						$pageerror=qa_lang_html('question/comment_limit');
 					} else {
 						$innotify=qa_post_text('notify') ? true : false;
 						$inemail=qa_post_text('email');
