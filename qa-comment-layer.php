@@ -56,10 +56,11 @@
 			var oldcss = jQuery('textarea[name=\"comment\"]').eq(idx).css('background');
 			var notify = jQuery('#ajax-comment-'+idx+' input[name=\"notify\"]').attr('checked');
 			var email = jQuery('#ajax-comment-'+idx+' input[name=\"email\"]').val();
+			var editor = jQuery('#ajax-comment-'+idx+' input[name=\"editor\"]').val();
 			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
 			
-			var dataString = 'ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+'&notify='+notify+'&email='+email;  
+			var dataString = 'ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+'&notify='+notify+'&email='+email+'&editor='+editor;  
 
 			jQuery.ajax({  
 			  type: 'POST',  
@@ -230,16 +231,16 @@
 					break;
 					
 				case false:
-					$incomment=$this->ajaxEditor($text);
+					$incomment=$text;
 		
 					if (!isset($incomment)) {
 						$pageerror=qa_lang_html('question/comment_limit');
 					} else {
 						$innotify=qa_post_text('notify') ? true : false;
 						$inemail=qa_post_text('email');
-						$informat = '';
+						$this->ajaxEditor($ineditor, $incomment, $informat, $intext);
 		
-						$errors=qa_comment_validate($incomment, '', $intext, $innotify, $inemail);
+						$errors=qa_comment_validate($incomment, $informat, $intext, $innotify, $inemail);
 						
 						if ($usecaptcha)
 							qa_captcha_validate($_POST, $errors);
@@ -278,10 +279,10 @@
 				
 		}
 		
-		function ajaxEditor($ineditor) {
+		function ajaxEditor(&$ineditor, &$incontent, &$informat, &$intext) {
+			$ineditor=qa_post_text('editor');
 			$editor=qa_load_module('editor', $ineditor);
-			$readdata=$editor->read_post($contentfield);
-			$incontent=$readdata['content'];
+			$readdata=$editor->read_post('comment');
 			$informat=$readdata['format'];
 
 			$viewer=qa_load_viewer($incontent, $informat);
