@@ -51,12 +51,14 @@
 			  data: dataString,  
 			  success: function(data) {
 				if(!idx) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery(data).insertBefore('.qa-q-view-main .ajax-comment');
-					else jQuery('.qa-q-view-c-list').replaceWith(data);
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">
+'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment');
+					else jQuery('.qa-q-view-c-list').append(data);
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery(data).insertBefore('.ajax-comment:eq('+idx+')');
-					else jQuery('.qa-a-item-c-list').eq(idx-1).replaceWith(data);
+					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">
+'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')');
+					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data);
 				}
 			  }  
 			});
