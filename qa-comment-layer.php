@@ -33,6 +33,13 @@
 		{
 			qa_html_theme_base::head_script();
 			$this->output_raw("
+	<style>
+		.ajax-comment-hidden {
+			display:none;
+		}
+	</style>");
+			
+			$this->output_raw("
 	<script>
 		function toggleComment(idx) {
 			jQuery('.ajax-comment').attr('disabled', 'disabled');
@@ -50,27 +57,24 @@
 			  url: '../1/this-is-a-test',  
 			  data: dataString,  
 			  success: function(data) {
-				if(!idx) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment');
-					else jQuery('.qa-q-view-c-list').append(data);
+				if(/^###/.exec(data) {
+					var error = data.substring(4);
+					window.alert(error);
+				}
+				else if(!idx) {
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').show('slow');
+					else jQuery('.qa-q-view-c-list').append(data).show('slow');
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')');
-					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data);
+					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').show('slow');
+					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).show('slow');
 				}
 			  }  
 			});
 		}
 	</script>");
 		}
-/*
-$('#contact_form').html("<div id='message'></div>");  
-				$('#message').html("<h2>Contact Form Submitted!</h2>")  
-				.append("<p>We will be in touch soon.</p>")  
-				.hide()  
-				.fadeIn(1500, function() {  
-				  $('#message').append("<img id='checkmark' src='images/check.png' />");  
-*/
+
 		function q_view_main($q_view)
 		{
 			if (qa_opt('ajax_comment_enable')) {
@@ -250,11 +254,14 @@ $('#contact_form').html("<div id='message'></div>");
 				
 			// return c_item
 				$c_item = $this->ajaxCommentCreate($parent,$commentid);
+				if(isset($c_item['classes'])) $c_item['classes'] .= ' ajax-comment-hidden';
+				else $c_item['classes'] = ' ajax-comment-hidden';
 				$this->c_list_item($c_item);
+				
 			}
 				
 		}
-
+		
 		function ajaxCommentCreate($parent,$cid)
 	/*
 		Return a theme-ready structure with all the comments and follow-on questions to show for post $parent (question or answer)
