@@ -19,11 +19,6 @@
 			qa_html_theme_base::head_script();
 			$this->output_raw("
 	<script>
-		jQuery('document').ready(
-			function(){
-				jQuery('input[name^=docomment]').attr('type','button');
-			}
-		);
 		function toggleComment(idx) {
 			jQuery('input[name^=docomment]').submit(false);
 			jQuery('textarea#comment').attr('disabled', 'disabled');
@@ -55,10 +50,12 @@
 		function form_button_data($button, $key, $style)
 		{
 			if($key == 'comment') {
-				
-				$button['tags'].=' onclick="toggleComment('.$this->idx++.');"';
+			$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
+			$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
+			
+			$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.$this->idx++.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');				
 			}
-			qa_html_theme_base::form_button_data($button, $key, $style);
+			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
 		
 		function qa_page_q_add_c_form($answerid)
