@@ -58,7 +58,6 @@
 					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery(data).insertBefore('.ajax-comment:eq('+idx+')');
 					else jQuery('.qa-a-item-c-list').eq(idx-1).replaceWith(data);
 				}
-				alert(idx);  
 			  }  
 			});
 		}
@@ -249,14 +248,99 @@ $('#contact_form').html("<div id='message'></div>");
 			if($pageerror) $this->output('### '.$pageerror);
 			else {
 				
-			// create c_list
-				
-				$c_list = qa_page_q_comment_follow_list($parent);
-				$class = ($aid?'qa-a-item':'qa-q-view');
-				$this->c_list($c_list,$class);
+			// return c_item
+				$c_item = $this->ajaxCommentCreate($parent,$commentid);
+				$this->c_list_item($c_item);
 			}
 				
 		}
+
+		function qa_page_q_comment_follow_list($parent,$cid)
+	/*
+		Return a theme-ready structure with all the comments and follow-on questions to show for post $parent (question or answer)
+	*/
+		{
+			global $qa_login_userid, $qa_cookieid, $usershtml, $formtype, $formpostid, $formrequested;
+			
+			$comment = qa_db_single_select(qa_db_full_post_selectspec(null, $cid));
+	
+			$htmloptions=qa_post_html_defaults('C', true);
+			$htmloptions['avatarsize']=qa_opt('avatar_q_page_c_size');
+			$c_view=qa_post_html_fields($comment, $qa_login_userid, $qa_cookieid, $usershtml, null, $htmloptions);
+				
+
+		//	Buttons for operating on this comment
+			
+			$c_view['form']=array(
+				'style' => 'light',
+				'buttons' => array(),
+			);
+		
+			if ($comment['editbutton'])
+				$c_view['form']['buttons']['edit']=array(
+					'tags' => 'NAME="doeditc_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/edit_button'),
+					'popup' => qa_lang_html('question/edit_c_popup'),
+				);
+				
+			if ($comment['flagbutton'])
+				$c_view['form']['buttons']['flag']=array(
+					'tags' => 'NAME="doflagc_'.qa_html($cid).'"',
+					'label' => qa_lang_html($cid['flagtohide'] ? 'question/flag_hide_button' : 'question/flag_button'),
+					'popup' => qa_lang_html('question/flag_c_popup'),
+				);
+			
+			if ($comment['unflaggable'])
+				$c_view['form']['buttons']['unflag']=array(
+					'tags' => 'NAME="dounflagc_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/unflag_button'),
+					'popup' => qa_lang_html('question/unflag_popup'),
+				);
+				
+			if ($comment['clearflaggable'])
+				$c_view['form']['buttons']['clearflags']=array(
+					'tags' => 'NAME="doclearflagsc_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/clear_flags_button'),
+					'popup' => qa_lang_html('question/clear_flags_popup'),
+				);
+
+			if ($comment['hideable'])
+				$c_view['form']['buttons']['hide']=array(
+					'tags' => 'NAME="dohidec_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/hide_button'),
+					'popup' => qa_lang_html('question/hide_c_popup'),
+				);
+				
+			if ($comment['reshowable'])
+				$c_view['form']['buttons']['reshow']=array(
+					'tags' => 'NAME="doshowc_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/reshow_button'),
+				);
+				
+			if ($comment['deleteable'])
+				$c_view['form']['buttons']['delete']=array(
+					'tags' => 'NAME="dodeletec_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/delete_button'),
+					'popup' => qa_lang_html('question/delete_c_popup'),
+				);
+				
+			if ($comment['claimable'])
+				$c_view['form']['buttons']['claim']=array(
+					'tags' => 'NAME="doclaimc_'.qa_html($cid).'"',
+					'label' => qa_lang_html('question/claim_button'),
+				);
+				
+			if ($parent['commentbutton'] && qa_opt('show_c_reply_buttons') && !$comment['hidden'])
+				$c_view['form']['buttons']['comment']=array(
+					'tags' => 'NAME="'.(($parent['basetype']=='Q') ? 'docommentq' : ('docommenta_'.qa_html($parent['postid']))).'"',
+					'label' => qa_lang_html('question/reply_button'),
+					'popup' => qa_lang_html('question/reply_c_popup'),
+				);
+
+			return @$c_view;
+		}
+
+			
 				
 	}
 
