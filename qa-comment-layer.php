@@ -25,9 +25,32 @@
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('#ajax-comment-'+idx).show();
 		}
+		function ajaxPost(idx) {
+			var content = escape(jQuery('textarea#comment').eq(idx).html());
+			var dataString = 'content='+ content;  
+			alert(dataString);
+			jQuery.ajax({  
+			  type: 'POST',  
+			  url: '".QA_HTML_THEME_LAYER_URLTOROOT."qa-comment-ajax.php',  
+			  data: dataString,  
+			  success: function(data) {
+				alert(data);  
+				alert(data.content);  
+				
+				});  
+			  }  
+			}); 
+		}
 	</script>");
 		}
-
+/*
+$('#contact_form').html("<div id='message'></div>");  
+				$('#message').html("<h2>Contact Form Submitted!</h2>")  
+				.append("<p>We will be in touch soon.</p>")  
+				.hide()  
+				.fadeIn(1500, function() {  
+				  $('#message').append("<img id='checkmark' src='images/check.png' />");  
+*/
 		function q_view_main($q_view)
 		{
 			if (qa_opt('ajax_comment_enable')) {
@@ -102,12 +125,12 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onsubmit="ajaxPost('.$this->idx.'); return false;"',
 						'label' => qa_lang_html('question/add_comment_button'),
 					),
 					
 					'cancel' => array(
-						'tags' => 'NAME="docancel"',
+						'tags' => 'NAME="docancel" onsubmit="toggleComment('.$this->idx.'); return false;"',
 						'label' => qa_lang_html('main/cancel_button'),
 					),
 				),
