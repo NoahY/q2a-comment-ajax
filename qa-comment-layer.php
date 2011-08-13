@@ -19,7 +19,18 @@
 			qa_html_theme_base::head_script();
 			$this->output_raw("
 	<script>
-		jQuery('document').ready(function(){jQuery('input[name^=docomment]').submit(false)});
+		jQuery('document').ready(
+			function(){
+				jQuery('input[name^=docomment]').submit(
+					function(e){
+						if (e.preventDefault)
+							e.preventDefault();
+						else
+							e.returnValue = false;
+					}
+				);
+			}
+		);
 		function toggleComment(idx) {
 			jQuery('input[name^=docomment]').submit(false);
 			jQuery('textarea#comment').attr('disabled', 'disabled');
