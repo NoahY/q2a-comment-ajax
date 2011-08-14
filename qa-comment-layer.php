@@ -47,7 +47,9 @@
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
-			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).show('slow');
+			if(jQuery('#ajax-comment-'+idx).length && !jQuery('#ajax-comment-'+idx).is(':visible')) {
+				jQuery('#ajax-comment-'+idx).show('slow');
+			}
 		}
 		function ajaxPost(idx,id) {
 
