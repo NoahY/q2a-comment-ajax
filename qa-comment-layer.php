@@ -199,7 +199,7 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.('do_ajax_comment'.'" ID="'.(isset($answerid) ? $answerid:'0').'" onclick="ajaxPost()"',
+						'tags' => 'NAME="'.'do_ajax_comment'.'" ID="'.(isset($answerid) ? $answerid:'0').'" onclick="ajaxPost()"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => 1,
 					),
