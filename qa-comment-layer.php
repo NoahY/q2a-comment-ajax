@@ -43,11 +43,11 @@
 	<script>
 		function toggleComment(idx) {
 			var loc = parseInt(jQuery('#ajax_comment_location').val());
-			if(!idx) {
+			if(idx === false) {
 				if(jQuery('#ajax-comment-'+loc).is(':visible')) jQuery('#ajax-comment-'+loc).fadeOut('slow');
 				return;
 			}
-			if(loc = idx){
+			if(loc == idx){
 				if(!jQuery('#ajax-comment-'+loc).is(':visible')) jQuery('#ajax-comment-'+loc).fadeIn('slow');
 				return;
 			}
@@ -62,7 +62,7 @@
 			}
 			jQuery('#ajax_comment_location').val(idx);
 		}
-		function ajaxPost(id) {
+		function ajaxPost() {
 
 			var content = jQuery('textarea[name=\"comment\"]').val();
 			var notify = jQuery('.ajax-comment input[name=\"notify\"]').attr('checked');
@@ -136,7 +136,7 @@
 				if (!empty($form)) {
 					if(isset($form['ajax_comment'])) {
 						unset($form['ajax_comment']);
-						$this->output('<div class="ajax-comment-hidden" style="display:none">');
+						$this->output('<div id="ajax-comment-hidden" style="display:none">');
 
 						qa_html_theme_base::form($form);
 
@@ -199,7 +199,7 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.($answerid?$answerid:'false').')"',
+						'tags' => 'NAME="'.('do_ajax_comment'.'" ID="'.(isset($answerid) ? $answerid:'0').'" onclick="ajaxPost()"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => 1,
 					),
