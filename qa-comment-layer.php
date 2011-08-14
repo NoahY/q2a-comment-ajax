@@ -2,7 +2,7 @@
 
 	class qa_html_theme_layer extends qa_html_theme_base {
 
-		var $idx = 0;
+		var $idx = 1;
 		var $idx2 = 0;
 
 		function option_default($option) {
@@ -43,6 +43,10 @@
 			$this->output_raw("
 	<script>
 		function toggleComment(idx) {
+			function(){
+				var content = jQuery('#ajax-comment-0').html();
+				jQuery('div.ajax-comment').html(content);
+			}
 			var x = '';
 			if(idx === false) x = 'slow';
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
@@ -90,40 +94,57 @@
 			}
 		}
 
+	// hidden form and empty q_comment
+
 		function q_view_main($q_view)
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				
 				if (!empty($q_view['content'])){
-					$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
+					$this->qa_page_q_add_c_form(null);
+					qa_html_theme_base::q_view_main($q_view);
+					$this->output('<div class="ajax-comment" id="ajax-comment-0">','</div>');
 				}
 			}
-			qa_html_theme_base::q_view_main($q_view);
+			else qa_html_theme_base::q_view_main($q_view);
 		}
+
+	// empty a_comment
+
 		function a_item_main($a_item)
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
+				qa_html_theme_base::a_item_main($a_item);
+				$this->output('<div class="ajax-comment" id="ajax-comment-'.($this->idx++).'">','</div>');
 			}
-			qa_html_theme_base::a_item_main($a_item);
+			else qa_html_theme_base::a_item_main($a_item);
 		}
+
+	// hidden form wrapper and hidden id field
+		
 		function form($form)
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				if (!empty($form)) {
 					if(isset($form['ajax_comment'])) {
 						unset($form['ajax_comment']);
-						$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
+						$this->output('<div class="ajax-comment-hidden" style="display:none">');
 					
+						$form['hidden']['ajax-comment-location'] = false;  // location is not yet set.
+
 						qa_html_theme_base::form($form);
-						
+
 						$this->output('</div>');
 					}
 					else qa_html_theme_base::form($form);
 				}
 			}
 			else qa_html_theme_base::form($form);
-		}		
+		}
+
+	// 
+		
 		function form_button_data($button, $key, $style)
 		{
 			if (qa_opt('ajax_comment_enable')) {
@@ -172,15 +193,15 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:'false').')"',
+						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.($answerid?$answerid:'false').')"',
 						'label' => qa_lang_html('question/add_comment_button'),
-						'ajax_comment' => $this->idx2,
+						'ajax_comment' => 1,
 					),
 					
 					'cancel' => array(
 						'tags' => 'NAME="docancel"',
 						'label' => qa_lang_html('main/cancel_button'),
-						'ajax_comment' => $this->idx2,
+						'ajax_comment' => 1,
 					),
 				),
 				
@@ -196,7 +217,6 @@
 					qa_insert_login_links(qa_lang_html(isset($qa_login_userid) ? 'misc/captcha_confirm_fix' : 'misc/captcha_login_fix')));
 					
 			$form['ajax_comment'] = 1;
-			$this->idx2++;
 			return $form;
 		}
 
