@@ -95,6 +95,7 @@
 			if (qa_opt('ajax_comment_enable')) {
 				
 				if (!empty($q_view['content'])){
+					$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader
 					$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
 				}
 			}
