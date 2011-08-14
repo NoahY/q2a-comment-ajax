@@ -3,7 +3,6 @@
 	class qa_html_theme_layer extends qa_html_theme_base {
 
 		var $idx = 1;
-		var $idx2 = 0;
 
 		function option_default($option) {
 			
@@ -43,26 +42,35 @@
 			$this->output_raw("
 	<script>
 		function toggleComment(idx) {
-			function(){
-				var content = jQuery('#ajax-comment-0').html();
-				jQuery('div.ajax-comment').html(content);
+			var loc = parseInt(jQuery('#ajax_comment_location').val());
+			if(!idx) {
+				if(jQuery('#ajax-comment-'+loc).is(':visible')) jQuery('#ajax-comment-'+loc).fadeOut('slow');
+				return;
 			}
-			var x = '';
-			if(idx === false) x = 'slow';
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide(x);
-			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
-			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).fadeIn('slow');
+			if(loc = idx){
+				if(!jQuery('#ajax-comment-'+loc).is(':visible')) jQuery('#ajax-comment-'+loc).fadeIn('slow');
+				return;
+			}
+			if(loc >= 0) {
+				jQuery('#ajax-comment-'+loc).fadeOut('slow');
+				jQuery('#ajax-comment-'+idx).html(jQuery('#ajax-comment-'+loc).html());
+				jQuery('#ajax-comment-'+loc).html('');
+			}
+			else {
+				jQuery('#ajax-comment-'+idx).html(jQuery('#ajax-comment-hidden').html()).fadeIn('slow');
+				jQuery('#ajax-comment-hidden').html('');			
+			}
+			jQuery('#ajax_comment_location').val(idx);
 		}
-		function ajaxPost(idx,id) {
+		function ajaxPost(id) {
 
-			var content = jQuery('textarea[name=\"comment\"]').eq(idx).val();
-			var notify = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"notify\"]').attr('checked');
-			var email = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"email\"]').val();
-			var editor = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"editor\"]').val();
-			var oldcss = jQuery('textarea[name=\"comment\"]').eq(idx).css('background');
-			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
-			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
+			var content = jQuery('textarea[name=\"comment\"]').val();
+			var notify = jQuery('.ajax-comment input[name=\"notify\"]').attr('checked');
+			var email = jQuery('.ajax-comment  input[name=\"email\"]').val();
+			var editor = jQuery('.ajax-comment  input[name=\"editor\"]').val();
+			var oldcss = jQuery('textarea[name=\"comment\"]').css('background');
+			jQuery('textarea[name=\"comment\"]').css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
+			jQuery('textarea[name=\"comment\"]').val('');
 			
 			var dataString = 'ajax_id='+idx+'&ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
 
@@ -74,7 +82,7 @@
 				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
-					jQuery('textarea[name=\"comment\"]').eq(idx).val(content);
+					jQuery('textarea[name=\"comment\"]').val(content);
 				}
 				else if(!idx) {
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').fadeIn('slow');
@@ -86,7 +94,7 @@
 					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').fadeIn('slow');
 					toggleComment(false);
 				}
-				jQuery('textarea[name=\"comment\"]').eq(idx).css('background',oldcss);
+				jQuery('textarea[name=\"comment\"]').css('background',oldcss);
 			  }  
 			});
 		}
@@ -94,14 +102,14 @@
 			}
 		}
 
-	// hidden form and empty q_comment
+	//  q_comment and hidden form
 
 		function q_view_main($q_view)
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				
 				if (!empty($q_view['content'])){
-					$this->qa_page_q_add_c_form(null);
+					$this->form($this->qa_page_q_add_c_form(null));
 					qa_html_theme_base::q_view_main($q_view);
 					$this->output('<div class="ajax-comment" id="ajax-comment-0">','</div>');
 				}
@@ -114,7 +122,6 @@
 		function a_item_main($a_item)
 		{
 			if (qa_opt('ajax_comment_enable')) {
-				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
 				qa_html_theme_base::a_item_main($a_item);
 				$this->output('<div class="ajax-comment" id="ajax-comment-'.($this->idx++).'">','</div>');
 			}
@@ -130,11 +137,10 @@
 					if(isset($form['ajax_comment'])) {
 						unset($form['ajax_comment']);
 						$this->output('<div class="ajax-comment-hidden" style="display:none">');
-					
-						$form['hidden']['ajax-comment-location'] = false;  // location is not yet set.
 
 						qa_html_theme_base::form($form);
 
+						$this->output('<INPUT TYPE="hidden" ID="ajax_comment_location" NAME="ajax-comment-location" VALUE="-1"/>');  // location is not yet set.
 						$this->output('</div>');
 					}
 					else qa_html_theme_base::form($form);
