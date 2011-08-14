@@ -100,16 +100,16 @@
 				}
 			}
 			qa_html_theme_base::q_view_main($q_view);
-			$this->form(@$q_view['c_form_2']); // answer form if any
 		}
 		function a_item_main($a_item)
 		{
 			if (qa_opt('ajax_comment_enable')) {
-				$switch = $a_item['c_form'];
+				$switch = @$a_item['c_form'];
 				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
-				$a_item['c_form_2'] = $switch;
+				$a_item['c_form_2'] = @$switch;
 			}
 			qa_html_theme_base::a_item_main($a_item);
+			$this->form(@$a_item['c_form_2']); // answer form if any
 		}
 		function form($form)
 		{
