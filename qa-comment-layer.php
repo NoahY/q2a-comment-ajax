@@ -46,8 +46,8 @@
 			var x = '';
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').fadeOut('slow');
-			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).fadeIn('slow');
+			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
+			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).show('slow');
 		}
 		function ajaxPost(idx,id) {
 
@@ -72,13 +72,13 @@
 					jQuery('textarea[name=\"comment\"]').eq(idx).val(content);
 				}
 				else if(!idx) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').fadeIn('slow');
-					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').fadeIn('slow');
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').show('slow');
+					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow');
 					toggleComment(false);
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').find('div.qa-c-list-item:last').fadeIn('slow');
-					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').fadeIn('slow');
+					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').find('div.qa-c-list-item:last').show('slow');
+					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').show('slow');
 					toggleComment(false);
 				}
 				jQuery('textarea[name=\"comment\"]').eq(idx).css('background',oldcss);
