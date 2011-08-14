@@ -44,10 +44,9 @@
 	<script>
 		function toggleComment(idx) {
 			var x = '';
-			if(idx === false) x = 'slow';
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide(x);
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
+			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').fadeOut('slow');
 			if(!jQuery('#ajax-comment-'+idx).is(':visible')) jQuery('#ajax-comment-'+idx).fadeIn('slow');
 		}
 		function ajaxPost(idx,id) {
