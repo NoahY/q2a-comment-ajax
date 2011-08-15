@@ -9,8 +9,9 @@ This is a plugin for **Question2Answer** that provides ajax commenting functiona
 --------
 Features
 --------
-- currently supports only basic formatting
+- currently supports only **basic editor** (don't try with markdown or wysiwyg editor, it won't work)
 - switch on and off via admin/plugins
+- option to include @username references when clicking reply, via admin/plugins
 
 ------------
 Installation
@@ -23,7 +24,8 @@ Installation
      at the command prompt (on Linux, Windows is a bit different)
    - To download directly, go to the `project page`_ and click **Download**
 
-#. navigate to your site, go to **Admin -> Plugins** on your q2a install and select the '**Enable ajax comment form**' option, then '**Save**'.
+#. navigate to your site, go to **Admin -> Posting** on your q2a install and make sure '**Default editor for comments:**' is set to '**Basic Editor**'.
+#. go to **Admin -> Plugins** and select the '**Enable ajax comment form**' option, then '**Save**'.
 
 .. _Question2Answer: http://www.question2answer.org/install.php
 .. _git: http://git-scm.com/
