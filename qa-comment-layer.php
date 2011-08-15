@@ -139,8 +139,19 @@
 		function c_item_buttons($c_item)
 		{
 			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
-				$user=qa_db_single_select(qa_db_user_account_selectspec($c_item['raw']['userid'], true));
-				$c_item['form']['buttons']['comment']['comment_username'] = @$user['handle'];
+
+				require_once QA_INCLUDE_DIR.'qa-app-users.php';
+				
+				if (QA_FINAL_EXTERNAL_USERS) {
+					$publictohandle=qa_get_public_from_userids(array($c_item['raw']['userid']));
+					$handle=@$publictohandle[$c_item['raw']['userid']];
+					
+				} 
+				else {
+					$user = qa_db_single_select(qa_db_user_account_selectspec($c_item['raw']['userid'], true));
+					$handle = @$user['handle'];
+				}
+				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
 			}
 			qa_html_theme_base::c_item_buttons($c_item);
 		}
