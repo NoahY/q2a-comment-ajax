@@ -130,16 +130,24 @@
 				else qa_html_theme_base::form($form);
 			}
 			else qa_html_theme_base::form($form);
-		}		
+		}
+		function c_item_buttons($c_item)
+		{
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
+				$user=qa_db_single_select(qa_db_user_account_selectspec($c_item['raw']['userid'], true));
+				$c_item['form']['buttons']['comment']['comment_username'] = @$user['handle'];
+			}
+			qa_html_theme_base::c_item_buttons($c_item);
+		}
+		
 		function form_button_data($button, $key, $style)
 		{
 			if (qa_opt('ajax_comment_enable')) {
-				if($key === 'comment') {
+				if($key == 'comment') {
 					
 					$handle = '';
-					if(qa_opt('ajax_comment_username')) {
-						require_once QA_INCLUDE_DIR.'qa-app-posts.php';
-						$handle = ",'".qa_post_userid_to_handle($userid)."'";
+					if(qa_opt('ajax_comment_username') && isset($button['comment_username'])) {
+						$handle = ",'".$button['comment_username']."'";
 					}
 					
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
@@ -157,6 +165,8 @@
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
+		
+	// worker functions
 		
 		function qa_page_q_add_c_form($answerid)
 	/*
