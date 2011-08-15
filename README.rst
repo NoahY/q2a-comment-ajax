@@ -1,5 +1,5 @@
 ================================
-Question2Answer Ajax Comment 0.2
+Question2Answer Ajax Comment 0.3
 ================================
 -----------
 Description
@@ -10,8 +10,10 @@ This is a plugin for **Question2Answer** that provides ajax commenting functiona
 Features
 --------
 - currently supports only **basic editor** (don't try with markdown or wysiwyg editor, it won't work)
-- switch on and off via admin/plugins
+- inserts new comment into page dynamically without having to reload
+- displays slide effects when showing and hiding comments and comment form.
 - option to include @username references when clicking reply, via admin/plugins
+- switch on and off via admin/plugins
 
 ------------
 Installation
