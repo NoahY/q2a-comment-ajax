@@ -42,13 +42,14 @@
 			
 			$this->output_raw("
 	<script>
-		function toggleComment(idx) {
+		function toggleComment(idx,username) {
 			var x = '';
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
 			if(jQuery('#ajax-comment-'+idx).length && !jQuery('#ajax-comment-'+idx).is(':visible')) {
 				jQuery('#ajax-comment-'+idx).show('slow');
+				jQuery('#ajax-comment-'+idx+' textarea#comment').val(".(qa_opt('ajax_comment_username')?"username":"''").");
 			}
 		}
 		function ajaxPost(idx,id) {
@@ -134,10 +135,11 @@
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				if($key === 'comment') {
+					if(qa_opt('ajax_comment_username')) $handle = ','+qa_post_userid_to_handle($userid);
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
 					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@$button['tags']).' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
-					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.(isset($_POST['ajax_id'])?$_POST['ajax_id']:$this->idx).');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
+					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.(isset($_POST['ajax_id'])?$_POST['ajax_id']:$this->idx).$handle');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
 				}
 				else if ($key == 'cancel' && isset($button['ajax_comment'])) {
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
