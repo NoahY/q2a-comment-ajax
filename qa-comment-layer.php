@@ -50,10 +50,10 @@
 			if(jQuery('#ajax-comment-'+idx).length) {
 				if(!jQuery('#ajax-comment-'+idx).is(':visible')) {
 					jQuery('#ajax-comment-'+idx).show('slow');
-					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username:''));
+					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username+' ':''));
 				}
 				else if(username) {
-					jQuery('#ajax-comment-'+idx+' textarea#comment').val(jQuery('#ajax-comment-'+idx+' textarea#comment').val()+username+' ');
+					jQuery('#ajax-comment-'+idx+' textarea#comment').val(jQuery('#ajax-comment-'+idx+' textarea#comment').val()+'@'+username+' ');
 				}
 			}
 		}
