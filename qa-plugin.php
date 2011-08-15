@@ -1,11 +1,11 @@
 <?php
         
 /*              
-        Plugin Name: Embed YouTube
-        Plugin URI: https://github.com/NoahY/q2a-embed
-        Plugin Description: Embed YouTube links
-        Plugin Version: 0.2
-        Plugin Date: 2011-07-30
+        Plugin Name: Ajax Comment Form
+        Plugin URI: https://github.com/NoahY/q2a-comment-ajax
+        Plugin Description: Ajax comment submission form
+        Plugin Version: 0.1
+        Plugin Date: 2011-08-14
         Plugin Author: NoahY
         Plugin Author URI:                              
         Plugin License: GPLv2                           
