@@ -141,7 +141,7 @@
 		
 		function q_view_buttons($q_view)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($q_view['content'])) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($q_view['form']['buttons'])) {
 
 				$handle = $this->getHandleFromId($q_view['raw']['userid']);
 				$q_view['form']['buttons']['comment']['comment_username'] = $handle;
@@ -151,7 +151,7 @@
 		
 		function a_item_buttons($a_item)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($a_item['content'])) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($a_item['form']['buttons'])) {
 
 				$handle = $this->getHandleFromId($a_item['raw']['userid']);
 				$a_item['form']['buttons']['comment']['comment_username'] = $handle;
@@ -161,7 +161,7 @@
 		
 		function c_item_buttons($c_item)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['content']) && !isset($c_item['url'])) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['form']['buttons'])) {
 
 				$handle = $this->getHandleFromId($c_item['raw']['userid']);
 				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
