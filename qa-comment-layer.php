@@ -137,7 +137,10 @@
 				if($key === 'comment') {
 					
 					$handle = '';
-					if(qa_opt('ajax_comment_username')) $handle = ",'".qa_post_userid_to_handle($userid)."'";
+					if(qa_opt('ajax_comment_username')) {
+						require_once QA_INCLUDE_DIR.'qa-include/qa-app-posts.php';
+						$handle = ",'".qa_post_userid_to_handle($userid)."'";
+					}
 					
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
