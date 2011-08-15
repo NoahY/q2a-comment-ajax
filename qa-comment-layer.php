@@ -144,7 +144,7 @@
 			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
 
 				$handle = $this->getHandleFromId($q_view['raw']['userid']);
-				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
+				$q_view['form']['buttons']['comment']['comment_username'] = $handle;
 			}
 			qa_html_theme_base::q_view_buttons($q_view);
 		}
@@ -154,7 +154,7 @@
 			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
 
 				$handle = $this->getHandleFromId($a_item['raw']['userid']);
-				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
+				$a_item['form']['buttons']['comment']['comment_username'] = $handle;
 			}
 			qa_html_theme_base::a_item_buttons($a_item);
 		}
