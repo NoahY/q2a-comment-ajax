@@ -369,14 +369,11 @@
 				'popup' => qa_lang_html('question/edit_c_popup'),
 			);
 
-			$comment['hideable']=(!$comment['hidden']) && !qa_user_permit_error('permit_hide_show');
-			
-			if ($comment['hideable'])
-				$c_view['form']['buttons']['hide']=array(
-					'tags' => 'NAME="dohidec_'.qa_html($cid).'"',
-					'label' => qa_lang_html('question/hide_button'),
-					'popup' => qa_lang_html('question/hide_c_popup'),
-				);
+			$c_view['form']['buttons']['hide']=array(
+				'tags' => 'NAME="dohidec_'.qa_html($cid).'"',
+				'label' => qa_lang_html('question/hide_button'),
+				'popup' => qa_lang_html('question/hide_c_popup'),
+			);
 
 			$comment['claimable']=(!isset($comment['userid'])) && isset($qa_login_userid) && (strcmp(@$comment['cookieid'], $qa_cookieid)==0) && !$permiterror_post_c;
 
