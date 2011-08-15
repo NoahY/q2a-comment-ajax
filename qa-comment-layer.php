@@ -148,7 +148,7 @@
 		function form_button_data($button, $key, $style)
 		{
 			if (qa_opt('ajax_comment_enable')) {
-				if($key == 'comment') {
+				if($key === 'comment') {
 					
 					$handle = '';
 					if(qa_opt('ajax_comment_username') && isset($button['comment_username']) && $button['comment_username'] != qa_get_logged_in_handle()) {
@@ -161,7 +161,7 @@
 					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@$button['tags']).' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.(isset($_POST['ajax_id'])?$_POST['ajax_id']:$this->idx).$handle.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
 				}
-				else if ($key == 'cancel' && isset($button['ajax_comment'])) {
+				else if ($key === 'cancel' && isset($button['ajax_comment'])) {
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
 					$this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment(false);" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');					
