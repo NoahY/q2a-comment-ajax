@@ -135,9 +135,13 @@
 		{
 			if (qa_opt('ajax_comment_enable')) {
 				if($key === 'comment') {
-					if(qa_opt('ajax_comment_username')) $handle = ','+qa_post_userid_to_handle($userid);
+					
+					$handle = '';
+					if(qa_opt('ajax_comment_username')) $handle = ",'".qa_post_userid_to_handle($userid)."'";
+					
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
+					
 					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@$button['tags']).' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
 					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.(isset($_POST['ajax_id'])?$_POST['ajax_id']:$this->idx).$handle.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
 				}
