@@ -49,7 +49,7 @@
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
 			if(jQuery('#ajax-comment-'+idx).length && !jQuery('#ajax-comment-'+idx).is(':visible')) {
 				jQuery('#ajax-comment-'+idx).show('slow');
-				jQuery('#ajax-comment-'+idx+' textarea#comment').val(".(qa_opt('ajax_comment_username')?"username":"''").");
+				jQuery('#ajax-comment-'+idx+' textarea#comment').val(".(qa_opt('ajax_comment_username')?"'@'+username":"''").");
 			}
 		}
 		function ajaxPost(idx,id) {
