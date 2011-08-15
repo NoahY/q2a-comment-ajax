@@ -136,21 +136,34 @@
 			}
 			else qa_html_theme_base::form($form);
 		}
+
+	// add @username to comment box
+		
+		function q_view_buttons($q_view)
+		{
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
+
+				$handle = $this->getHandleFromId($q_view['raw']['userid']);
+				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
+			}
+			qa_html_theme_base::q_view_buttons($q_view);
+		}
+		
+		function a_item_buttons($a_item)
+		{
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
+
+				$handle = $this->getHandleFromId($a_item['raw']['userid']);
+				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
+			}
+			qa_html_theme_base::a_item_buttons($a_item);
+		}
+		
 		function c_item_buttons($c_item)
 		{
 			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username')) {
 
-				require_once QA_INCLUDE_DIR.'qa-app-users.php';
-				
-				if (QA_FINAL_EXTERNAL_USERS) {
-					$publictohandle=qa_get_public_from_userids(array($c_item['raw']['userid']));
-					$handle=@$publictohandle[$c_item['raw']['userid']];
-					
-				} 
-				else {
-					$user = qa_db_single_select(qa_db_user_account_selectspec($c_item['raw']['userid'], true));
-					$handle = @$user['handle'];
-				}
+				$handle = $this->getHandleFromId($c_item['raw']['userid']);
 				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
 			}
 			qa_html_theme_base::c_item_buttons($c_item);
@@ -385,6 +398,20 @@
 			return @$c_view;
 		}
 
+		function getHandleFromId($userid) {
+			require_once QA_INCLUDE_DIR.'qa-app-users.php';
+			
+			if (QA_FINAL_EXTERNAL_USERS) {
+				$publictohandle=qa_get_public_from_userids(array($userid));
+				$handle=@$publictohandle[$userid];
+				
+			} 
+			else {
+				$user = qa_db_single_select(qa_db_user_account_selectspec($userid, true));
+				$handle = @$user['handle'];
+			}
+			return $handle;
+		}
 			
 				
 	}
