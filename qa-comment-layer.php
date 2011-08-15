@@ -146,7 +146,7 @@
 				if($key == 'comment') {
 					
 					$handle = '';
-					if(qa_opt('ajax_comment_username') && isset($button['comment_username'])) {
+					if(qa_opt('ajax_comment_username') && isset($button['comment_username']) && $button['comment_username'] != qa_get_logged_in_handle()) {
 						$handle = ",'".$button['comment_username']."'";
 					}
 					
