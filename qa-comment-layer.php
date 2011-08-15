@@ -138,7 +138,7 @@
 					
 					$handle = '';
 					if(qa_opt('ajax_comment_username')) {
-						require_once QA_INCLUDE_DIR.'qa-include/qa-app-posts.php';
+						require_once QA_INCLUDE_DIR.'qa-app-posts.php';
 						$handle = ",'".qa_post_userid_to_handle($userid)."'";
 					}
 					
