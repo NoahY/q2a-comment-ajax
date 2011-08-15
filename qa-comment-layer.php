@@ -47,9 +47,14 @@
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
-			if(jQuery('#ajax-comment-'+idx).length && !jQuery('#ajax-comment-'+idx).is(':visible')) {
-				jQuery('#ajax-comment-'+idx).show('slow');
-				jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username:''));
+			if(jQuery('#ajax-comment-'+idx).length) {
+				if(!jQuery('#ajax-comment-'+idx).is(':visible')) {
+					jQuery('#ajax-comment-'+idx).show('slow');
+					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username:''));
+				}
+				else if(username) {
+					jQuery('#ajax-comment-'+idx+' textarea#comment').val(jQuery('#ajax-comment-'+idx+' textarea#comment').val()+username+' ');
+				}
 			}
 		}
 		function ajaxPost(idx,id) {
