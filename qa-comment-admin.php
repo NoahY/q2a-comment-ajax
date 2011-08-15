@@ -21,6 +21,7 @@
             if (qa_clicked('ajax_comment_save')) {
 		qa_opt('ajax_comment_enable',(bool)qa_post_text('ajax_comment_enable'));
 		qa_opt('ajax_comment_username',(bool)qa_post_text('ajax_comment_username'));
+                $ok = 'Settings Saved.';
 
             }
             
