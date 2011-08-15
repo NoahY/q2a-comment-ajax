@@ -161,7 +161,7 @@
 		
 		function c_item_buttons($c_item)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['content'])) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['content']) && !isset($c_item['url'])) {
 
 				$handle = $this->getHandleFromId($c_item['raw']['userid']);
 				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
