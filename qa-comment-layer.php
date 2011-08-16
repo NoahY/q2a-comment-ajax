@@ -123,7 +123,7 @@
 		}
 		function form($form)
 		{
-			if (qa_opt('ajax_comment_enable') && !$qa_state) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
 				if (!empty($form)) {
 					if(isset($form['ajax_comment'])) {
 						unset($form['ajax_comment']);
