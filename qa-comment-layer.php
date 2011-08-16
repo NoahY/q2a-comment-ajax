@@ -294,7 +294,19 @@
 						$innotify=qa_post_text('notify') ? true : false;
 						$inemail=qa_post_text('email');
 						$this->ajaxEditor($ineditor, $incomment, $informat, $intext);
-		
+						
+						// use our own format types
+						
+						$formats = array();
+						$formats[] = 'plain text';
+						$editors = qa_list_modules('viewer');
+						if(in_array('Markdown Viewer',$editors)) {
+							$formats[] = 'markdown';
+						}
+						$formats[]='html';
+												
+						$informat = $formats[qa_opt('ajax_comment_format')];
+						
 						$errors=qa_comment_validate($incomment, $informat, $intext, $innotify, $inemail);
 						
 						if ($usecaptcha)
@@ -312,13 +324,7 @@
 									$qa_cookieid=qa_cookie_get_create(); // create a new cookie if necessary
 								
 								// get editor format
-								if(!$informat) {
-									$editors = qa_list_modules('viewer');
-									if(in_array('Markdown Viewer',$editors)) {
-										$informat = 'markdown';
-									}
-									else $informat = 'html';
-								}
+
 								
 								$commentid=qa_comment_create($qa_login_userid, qa_get_logged_in_handle(), $qa_cookieid, $incomment, $informat, $intext, $innotify, $inemail, $question, $parent, $commentsfollows);
 								qa_report_write_action($qa_login_userid, $qa_cookieid, 'c_post', $questionid, @$answer['postid'], $commentid);
