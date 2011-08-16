@@ -45,19 +45,23 @@
 			
 			$this->output_raw("
 	<script>
+		var ajax_comment_height = 0;
 		function toggleComment(idx,username) {
-			var x = '';
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
+			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide(200);
 			if(jQuery('#ajax-comment-'+idx).length) {
 				if(!jQuery('#ajax-comment-'+idx).is(':visible')) {
-					jQuery('#ajax-comment-'+idx).show('slow');
-					$('html, body').animate({scrollTop:jQuery('#ajax-comment-'+idx).offset.top}, 'slow');
+					jQuery('#ajax-comment-'+idx).show(200,function(){
+						jQuery('html').animate({scrollTop:(jQuery('#ajax-comment-'+idx).offset().top-jQuery(window).height()+jQuery('#ajax-comment-'+idx).height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+					});
 					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username+' ':''));
 				}
-				else if(username) {
-					jQuery('#ajax-comment-'+idx+' textarea#comment').val(jQuery('#ajax-comment-'+idx+' textarea#comment').val()+'@'+username+' ');
+				else {
+					if(username) {
+						jQuery('#ajax-comment-'+idx+' textarea#comment').val(jQuery('#ajax-comment-'+idx+' textarea#comment').val()+'@'+username+' ');
+					}
+					jQuery('html').animate({scrollTop:(jQuery('#ajax-comment-'+idx).offset().top-jQuery(window).height()+jQuery('#ajax-comment-'+idx).height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
 				}
 			}
 		}
