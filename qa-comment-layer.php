@@ -53,6 +53,7 @@
 			if(jQuery('#ajax-comment-'+idx).length) {
 				if(!jQuery('#ajax-comment-'+idx).is(':visible')) {
 					jQuery('#ajax-comment-'+idx).show('slow');
+					$('html, body').animate({scrollTop:jQuery('#ajax-comment-'+idx).offset.top}, 'slow');
 					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username+' ':''));
 				}
 				else if(username) {
