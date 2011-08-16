@@ -52,7 +52,7 @@
 		'label' => 'Comment format',
 		'tags' => 'NAME="ajax_comment_format"',
 		'type' => 'select',
-		'options' => array('plain text','markdown','html'),
+		'options' => $formats,
 		'value' => $formats[qa_opt('ajax_comment_format')],
             );
             
