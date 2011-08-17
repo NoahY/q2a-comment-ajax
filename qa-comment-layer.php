@@ -19,6 +19,7 @@
 		
 		function doctype()
 		{
+			qa_error_log($_POST);
 			global $qa_state;
 			$this->qa_state = $qa_state;
 			if(!isset($_POST['ajax_comment_content'])) qa_html_theme_base::doctype();
@@ -26,7 +27,8 @@
 
 		function html()
 		{
-			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment($_POST['ajax_comment_content'],(isset($_POST['ajax_comment_id'])?$_POST['ajax_comment_id']:null));
+			
+			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment(qa_post_text('ajax_comment_content'),(isset($_POST['ajax_comment_id'])?qa_post_text('ajax_comment_id'):null));
 			else qa_html_theme_base::html();
 		}
 		
@@ -94,7 +96,7 @@
 			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
 			
-			var dataString = 'ajax_id='+idx+'&ajax_comment_content='+escape(content)+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
+			var dataString = 'ajax_id='+idx+'&ajax_comment_content='+content+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
 
 			jQuery.ajax({  
 			  type: 'POST',  
@@ -310,10 +312,10 @@
 					break;
 					
 				case false:
-					$incomment=$text;
+					$incomment=qa_post_text('ajax_comment_content');
 		
 					if (!isset($incomment)) {
-						$pageerror=qa_lang_html('question/comment_limit');
+						$pageerror=qa_lang_html('bork');
 					} else {
 						$innotify=qa_post_text('notify') ? true : false;
 						$inemail=qa_post_text('email');
@@ -376,8 +378,10 @@
 		
 		function ajaxEditor(&$ineditor, &$incontent, &$informat, &$intext) {
 			$ineditor=qa_post_text('editor');
+			
 			$editor=qa_load_module('editor', $ineditor);
-			$readdata=$editor->read_post('comment');
+			$readdata=$editor->read_post('ajax_comment_content');
+			$incontent=$readdata['content'];
 			$informat=$readdata['format'];
 
 			$viewer=qa_load_viewer($incontent, $informat);
