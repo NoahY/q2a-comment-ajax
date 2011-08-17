@@ -48,20 +48,39 @@
 		var ajax_comment_height = 0;
 		function toggleComment(idx,username) {
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
-			jQuery('#ajax-comment-'+idx).removeAttr('disabled');
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide(200);
-			if(jQuery('#ajax-comment-'+idx).length) {
-				if(!jQuery('#ajax-comment-'+idx).is(':visible')) {
-					jQuery('#ajax-comment-'+idx).show(200,function(){
-						jQuery('html').animate({scrollTop:(jQuery('#ajax-comment-'+idx).offset().top-jQuery(window).height()+jQuery('#ajax-comment-'+idx).height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
-					});
+			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
+
+			var cDiv = jQuery('#ajax-comment-'+idx);
+			cDiv.removeAttr('disabled');
+
+			if(cDiv.length) {
+				if(!cDiv.is(':visible')) {
+					
+					// check if onscreen
+					
+					var top = (-1)*jQuery('html').offset().top;
+					var cTop = cDiv.prev().offset().top + cDiv.prev().height();
+					var bot = top + jQuery(window).height();
+					
+					if (cTop > top && cTop < bot) {
+						cDiv.show('slow',function(){
+							jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv.height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+						});
+					}
+					else {
+						cDiv.show();
+						jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv.height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+					}
+
 					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username+' ':''));
+
 				}
 				else {
 					if(username) {
 						jQuery('#ajax-comment-'+idx+' textarea#comment').val(jQuery('#ajax-comment-'+idx+' textarea#comment').val()+'@'+username+' ');
 					}
-					jQuery('html').animate({scrollTop:(jQuery('#ajax-comment-'+idx).offset().top-jQuery(window).height()+jQuery('#ajax-comment-'+idx).height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+
+					jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv+20)+'px'},{queue:false, duration:600, easing: 'swing'});
 				}
 			}
 		}
