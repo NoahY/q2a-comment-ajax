@@ -1,5 +1,5 @@
 ================================
-Question2Answer Ajax Comment 0.3
+Question2Answer Ajax Comment 0.4
 ================================
 -----------
 Description
@@ -11,7 +11,8 @@ Features
 --------
 - currently supports only **basic editor** (don't try with markdown or wysiwyg editor, it won't work)
 - inserts new comment into page dynamically without having to reload
-- displays slide effects when showing and hiding comments and comment form.
+- displays slide effects when showing and hiding comments and comment form
+- animated close when pressing Esc key
 - option to include @username references when clicking reply, via admin/plugins
 - switch on and off via admin/plugins
 
