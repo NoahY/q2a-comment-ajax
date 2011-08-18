@@ -2,8 +2,10 @@
     class qa_ajax_comment_admin {
 	function option_default($option) {
 	    switch($option) {
-	    default:
-		return false;
+		case 'ajax_comment_format':
+		    return 0;
+		default:
+		    return false;
 	    }
 	}       
         function allow_template($template)
@@ -53,7 +55,7 @@
 		'tags' => 'NAME="ajax_comment_format"',
 		'type' => 'select',
 		'options' => $formats,
-		'value' => $formats[qa_opt('ajax_comment_format')],
+		'value' => @$formats[qa_opt('ajax_comment_format')],
             );
             
             $fields[] = array(

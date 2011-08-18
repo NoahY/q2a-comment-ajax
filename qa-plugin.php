@@ -18,7 +18,7 @@
                         exit;   
         }               
 
-        qa_register_plugin_module('module', 'qa-comment-admin.php', 'qa_ajax_comment_admin', 'Ajax Comment Admin');
+        qa_register_plugin_module('widget', 'qa-comment-admin.php', 'qa_ajax_comment_admin', 'Ajax Comment Admin');
                 
         qa_register_plugin_layer('qa-comment-layer.php', 'Ajax Comment Layer');
                         

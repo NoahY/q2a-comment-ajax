@@ -270,6 +270,10 @@
 					'editor' => qa_html($editorname),
 				),
 			);
+			
+			$form['fields']['content']['tags'] = @$form['fields']['tags'].' onkeypress="if(event.which == 0) toggleComment(false);"';
+			
+			
 			qa_set_up_notify_fields($qa_content, $form['fields'], 'C', qa_get_logged_in_email(),
 				isset($innotify) ? $innotify : qa_opt('notify_users_default'), @$inemail, @$errors['email']);
 			
