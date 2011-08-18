@@ -50,10 +50,15 @@
 		function toggleComment(idx,username) {
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
-
+			
+			if(idx === false) {
+				jQuery('#ajax-comment-'+idx+' textarea#comment').val('');
+				return false;
+			}
+			
 			var cDiv = jQuery('#ajax-comment-'+idx);
 			cDiv.removeAttr('disabled');
-
+			
 			if(cDiv.length) {
 				if(!cDiv.is(':visible')) {
 					
@@ -66,11 +71,13 @@
 					if (cTop > top && cTop < bot) {
 						cDiv.show('slow',function(){
 							jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv.height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+							jQuery('#ajax-comment-'+idx+' textarea#comment').focus();
 						});
 					}
 					else {
 						cDiv.show();
 						jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv.height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+						jQuery('#ajax-comment-'+idx+' textarea#comment').focus();
 					}
 
 					jQuery('#ajax-comment-'+idx+' textarea#comment').val((username?'@'+username+' ':''));
@@ -82,6 +89,7 @@
 					}
 
 					jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+					jQuery('#ajax-comment-'+idx+' textarea#comment').focus();
 				}
 			}
 		}
@@ -190,7 +198,6 @@
 		function c_item_buttons($c_item)
 		{
 			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['form']['buttons']['comment']) && !$this->qa_state) {
-
 				$handle = $this->getHandleFromId($c_item['raw']['userid']);
 				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
 			}
@@ -271,7 +278,7 @@
 				),
 			);
 			
-			$form['fields']['content']['tags'] = @$form['fields']['tags'].' onkeypress="if(event.which == 0) toggleComment(false);"';
+			$form['fields']['content']['tags'] = @$form['fields']['tags'].' id="comment" onkeydown="if(event.keyCode == 27) toggleComment(false);"';
 			
 			
 			qa_set_up_notify_fields($qa_content, $form['fields'], 'C', qa_get_logged_in_email(),
