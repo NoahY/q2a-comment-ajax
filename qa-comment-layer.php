@@ -237,7 +237,7 @@
 					
 					$ourid = qa_get_logged_in_userid();
 					
-					if(qa_opt('ajax_comment_flash_star') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && @$button['popup'] == qa_lang_html('question/comment_a_popup') && $this->content['q_view']['raw']['userid'] == $ourid && $this->content['a_list']['as'][$this->idx-1]['raw']['userid'] != $ourid) {
+					if(qa_opt('ajax_comment_flash_star') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && @$button['popup'] == qa_lang_html('question/comment_a_popup') && $this->content['q_view']['raw']['userid'] == $ourid && @$this->content['a_list']['as'][$this->idx-1]['raw']['userid'] != $ourid) {
 						$star = ','.$this->idx;
 					}
 					
