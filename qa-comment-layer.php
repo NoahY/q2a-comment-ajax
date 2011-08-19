@@ -46,8 +46,18 @@
 			
 			$this->output_raw("
 	<script>
+	
+		function flashStar(idx) {
+		
+			var star = jQuery('.qa-a-select-button').eq(idx-1);
+			star.attr('class','qa-a-select-hover');
+			star.fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow',function(){
+				star.attr('class','qa-a-select-button').fadeIn('slow');
+			});
+		}
+	
 		var ajax_comment_height = 0;
-		function toggleComment(idx,username) {
+		function toggleComment(idx,username,flash) {
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
 			
@@ -61,6 +71,10 @@
 			
 			if(cDiv.length) {
 				if(!cDiv.is(':visible')) {
+					
+					// flash star
+						
+					if(flash && !jQuery('.qa-a-item-selected').length) flashStar(flash);
 					
 					// check if onscreen
 					
@@ -209,17 +223,31 @@
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
 				if($key === 'comment') {
+
+					// insert username
 					
 					$handle = '';
 					if(qa_opt('ajax_comment_username') && isset($button['comment_username']) && $button['comment_username'] != qa_get_logged_in_handle()) {
 						$handle = ",'".$button['comment_username']."'";
 					}
+
+					// flash star if we are the questioner commenting on an answer
+				
+					$star = '';
+					
+					$ourid = qa_get_logged_in_userid();
+					
+					if(qa_opt('ajax_comment_flash_star') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && @$button['popup'] == qa_lang_html('question/comment_a_popup') && $this->content['q_view']['raw']['userid'] == $ourid && $this->content['a_list']['as'][$this->idx-1]['raw']['userid'] != $ourid) {
+						$star = ','.$this->idx;
+					}
+					
+					$toggle_opts = ($handle?$handle.$star:',null'.$star);
 					
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
 					$hoverclass='qa-form-'.$style.'-hover qa-form-'.$style.'-hover-'.$key;
 					
 					if(isset($button['ajax_comment'])) $this->output('<INPUT'.rtrim(' '.@$button['tags']).' VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');	
-					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.(isset($_POST['ajax_id'])?$_POST['ajax_id']:$this->idx).$handle.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
+					else  $this->output('<INPUT'.rtrim(' '.@$button['tags']).' onclick="toggleComment('.(isset($_POST['ajax_id'])?$_POST['ajax_id']:$this->idx).$toggle_opts.');" VALUE="'.@$button['label'].'" TITLE="'.@$button['popup'].'" TYPE="button" CLASS="'.$baseclass.'" onmouseover="this.className=\''.$hoverclass.'\';" onmouseout="this.className=\''.$baseclass.'\';"/>');
 				}
 				else if ($key === 'cancel' && isset($button['ajax_comment'])) {
 					$baseclass='qa-form-'.$style.'-button qa-form-'.$style.'-button-'.$key;
@@ -245,7 +273,7 @@
 			
 			$editorname=isset($ineditor) ? $ineditor : qa_opt('editor_for_cs');
 			$editor=qa_load_editor(@$incomment, @$informat, $editorname);
-
+			
 			$form=array(
 				'title' => qa_lang_html(isset($answerid) ? 'question/your_comment_a' : 'question/your_comment_q'),
 

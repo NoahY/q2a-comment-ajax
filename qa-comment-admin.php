@@ -24,6 +24,7 @@
 		qa_opt('ajax_comment_enable',(bool)qa_post_text('ajax_comment_enable'));
 		qa_opt('ajax_comment_format',(int)qa_post_text('ajax_comment_format'));
 		qa_opt('ajax_comment_username',(bool)qa_post_text('ajax_comment_username'));
+		qa_opt('ajax_comment_flash_star',(bool)qa_post_text('ajax_comment_flash_star'));
                 $ok = 'Settings Saved.';
 
             }
@@ -62,6 +63,13 @@
                 'label' => 'Add @username to comment box',
                 'tags' => 'NAME="ajax_comment_username"',
                 'value' => (int)qa_opt('ajax_comment_username'),
+                'type' => 'checkbox',
+            );
+            
+            $fields[] = array(
+                'label' => 'Flash select star if commenting on answer to own question',
+                'tags' => 'NAME="ajax_comment_flash_star"',
+                'value' => (int)qa_opt('ajax_comment_flash_star'),
                 'type' => 'checkbox',
             );
 
