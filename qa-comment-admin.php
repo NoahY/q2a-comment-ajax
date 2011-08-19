@@ -4,6 +4,8 @@
 	    switch($option) {
 		case 'ajax_comment_format':
 		    return 0;
+		case 'ajax_comment_answer_reminder_text':
+		    return '<div class="ajax-comment-reminder">Remember, you can accept an answer by clicking the star in the top right corner.</div>';
 		default:
 		    return false;
 	    }
@@ -25,6 +27,8 @@
 		qa_opt('ajax_comment_format',(int)qa_post_text('ajax_comment_format'));
 		qa_opt('ajax_comment_username',(bool)qa_post_text('ajax_comment_username'));
 		qa_opt('ajax_comment_flash_star',(bool)qa_post_text('ajax_comment_flash_star'));
+		qa_opt('ajax_comment_answer_reminder',(bool)qa_post_text('ajax_comment_answer_reminder'));
+		qa_opt('ajax_comment_answer_reminder_text',qa_post_text('ajax_comment_answer_reminder_text'));
                 $ok = 'Settings Saved.';
 
             }
@@ -64,6 +68,21 @@
                 'tags' => 'NAME="ajax_comment_username"',
                 'value' => (int)qa_opt('ajax_comment_username'),
                 'type' => 'checkbox',
+            );
+            
+            $fields[] = array(
+                'label' => 'Show reminder text if commenting on answer to own question',
+                'tags' => 'NAME="ajax_comment_answer_reminder"',
+                'value' => (int)qa_opt('ajax_comment_answer_reminder'),
+                'type' => 'checkbox',
+            );
+            
+            
+            $fields[] = array(
+                'label' => 'Reminder text',
+                'tags' => 'NAME="ajax_comment_answer_reminder_text"',
+                'value' => qa_html(qa_opt('ajax_comment_answer_reminder_text')),
+                'type' => 'text',
             );
             
             $fields[] = array(

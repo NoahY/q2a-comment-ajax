@@ -42,6 +42,10 @@
 		.ajax-comment-hidden {
 			display:none;
 		}
+		.ajax-comment-reminder {
+			font-size:10px;
+			font-style:italic;
+		}
 	</style>");
 			
 			$this->output_raw("
@@ -51,7 +55,7 @@
 		
 			var star = jQuery('.qa-a-select-button').eq(idx-1);
 			star.attr('class','qa-a-select-hover');
-			star.fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow',function(){
+			star.fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow',function(){
 				star.attr('class','qa-a-select-button').fadeIn('slow');
 			});
 		}
@@ -308,7 +312,19 @@
 			);
 			
 			$form['fields']['content']['tags'] = @$form['fields']['tags'].' id="comment" onkeydown="if(event.keyCode == 27) toggleComment(false);"';
+
+
+			// add reminder text if commenting on answer to own question
+
+			$ourid = qa_get_logged_in_userid();
 			
+			if(qa_opt('ajax_comment_answer_reminder') && !$this->content['q_view']['raw']['selchildid'] && isset($answerid) && $this->content['q_view']['raw']['userid'] == $ourid && @$this->content['a_list']['as'][$this->idx-1]['raw']['userid'] != $ourid) {
+				$form['fields']['custom_message'] = array(
+						'note' => qa_opt('ajax_comment_answer_reminder_text'),
+						'type' => 'static',
+				);
+				
+			}			
 			
 			qa_set_up_notify_fields($qa_content, $form['fields'], 'C', qa_get_logged_in_email(),
 				isset($innotify) ? $innotify : qa_opt('notify_users_default'), @$inemail, @$errors['email']);
