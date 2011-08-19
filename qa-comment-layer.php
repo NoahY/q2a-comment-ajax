@@ -52,7 +52,7 @@
 			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
 			
 			if(idx === false) {
-				jQuery('#ajax-comment-'+idx+' textarea#comment').val('');
+				jQuery('textarea#comment').val('');
 				return false;
 			}
 			
@@ -94,14 +94,15 @@
 			}
 		}
 		function ajaxPost(idx,id) {
+			var cText = jQuery('#ajax-comment-'+idx+' textarea#comment');
+			var content = cText.val();
 
-			var content = jQuery('textarea[name=\"comment\"]').eq(idx).val();
 			var notify = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"notify\"]').attr('checked');
 			var email = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"email\"]').val();
 			var editor = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"editor\"]').val();
-			var oldcss = jQuery('textarea[name=\"comment\"]').eq(idx).css('background');
-			jQuery('textarea[name=\"comment\"]').eq(idx).css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
-			jQuery('textarea[name=\"comment\"]').eq(idx).val('');
+			var oldcss = cText.css('background');
+			cText.css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
+			cText.val('');
 			
 			var dataString = 'ajax_id='+idx+'&ajax_comment_content='+content+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
 
@@ -113,7 +114,7 @@
 				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
-					jQuery('textarea[name=\"comment\"]').eq(idx).val(content);
+					cText.val(content);
 				}
 				else if(!idx) {
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').show('slow');
@@ -125,7 +126,7 @@
 					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').show('slow');
 					toggleComment(false);
 				}
-				jQuery('textarea[name=\"comment\"]').eq(idx).css('background',oldcss);
+				cText.css('background',oldcss);
 			  }  
 			});
 		}
