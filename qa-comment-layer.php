@@ -36,7 +36,7 @@
 		function head_script()
 		{
 			qa_html_theme_base::head_script();
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && $this->template == 'question') {
 				$this->output_raw("
 	<style>
 		.ajax-comment-hidden {
@@ -379,7 +379,7 @@
 						// use our own format types
 						
 						$formats = array();
-						$formats[] = 'plain text';
+						$formats[] = '';
 						$editors = qa_list_modules('viewer');
 						if(in_array('Markdown Viewer',$editors)) {
 							$formats[] = 'markdown';

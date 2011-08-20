@@ -72,15 +72,14 @@
             
             $fields[] = array(
                 'label' => 'Show reminder text if commenting on answer to own question',
-                'tags' => 'NAME="ajax_comment_answer_reminder"',
+                'tags' => 'NAME="ajax_comment_answer_reminder" onclick="if(this.checked) jQuery(\'#ajax_comment_answer_reminder_text\').fadeIn(); else jQuery(\'#ajax_comment_answer_reminder_text\').fadeOut();"',
                 'value' => (int)qa_opt('ajax_comment_answer_reminder'),
                 'type' => 'checkbox',
             );
             
             
             $fields[] = array(
-                'label' => 'Reminder text',
-                'tags' => 'NAME="ajax_comment_answer_reminder_text"',
+                'tags' => 'id="ajax_comment_answer_reminder_text" name="ajax_comment_answer_reminder_text" style="display:'.(qa_opt('ajax_comment_answer_reminder')?'block':'none').'"',
                 'value' => qa_html(qa_opt('ajax_comment_answer_reminder_text')),
                 'type' => 'text',
             );
