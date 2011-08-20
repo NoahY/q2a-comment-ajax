@@ -1,5 +1,5 @@
 ================================
-Question2Answer Ajax Comment 0.5
+Question2Answer Ajax Comment 0.6
 ================================
 -----------
 Description
