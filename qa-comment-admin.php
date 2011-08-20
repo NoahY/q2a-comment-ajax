@@ -7,7 +7,7 @@
 		case 'ajax_comment_answer_reminder_text':
 		    return '<div class="ajax-comment-reminder">Remember, you can accept an answer by clicking the star in the top right corner.</div>';
 		default:
-		    return false;
+		    return null;
 	    }
 	}       
         function allow_template($template)
