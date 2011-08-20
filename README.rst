@@ -9,13 +9,14 @@ This is a plugin for **Question2Answer** that provides ajax commenting functiona
 --------
 Features
 --------
-- currently supports only **basic editor** (don't try with markdown or wysiwyg editor, it won't work)
+- currently supports only **basic editor**, but format can be set in admin to markdown or html
 - inserts new comment into page dynamically without having to reload
 - displays slide effects when showing and hiding comments and comment form
 - option to flash star as reminder when commenting on answer to own question
 - animated close when pressing Esc key
 - option to include @username references when clicking reply, via admin/plugins
 - switch on and off via admin/plugins
+- extra option to show popup reminder when voting on answer to own question
 
 ------------
 Installation
