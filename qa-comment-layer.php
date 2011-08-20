@@ -46,6 +46,19 @@
 			font-size:10px;
 			font-style:italic;
 		}
+		.ajax-comment-vote-popup {
+			position: absolute; 
+			background-color:yellow; 
+			padding:10px;
+			border:1px solid; 
+			margin-left:20px; 
+			margin-top:45px; 
+			text-align:justify; 
+			width:250px; 
+			font-weight:bold;
+			cursor:pointer;
+			display:none;
+		}
 	</style>");
 			
 			$this->output_raw("
@@ -58,6 +71,11 @@
 			star.fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow').fadeIn('slow').fadeOut('slow',function(){
 				star.attr('class','qa-a-select-button').fadeIn('slow');
 			});
+		}
+
+		function voteReminderNotice(elem,idx) {
+			flashStar(idx);
+			jQuery('<div class=\"ajax-comment-vote-popup\" onclick=\"this.style.display=\\'none\\';\">".qa_html(qa_opt('ajax_comment_popup_notice_text'))."</div>').insertAfter(elem.parentNode.parentNode).fadeIn('fast').delay(8000).fadeOut('slow');
 		}
 	
 		var ajax_comment_height = 0;
@@ -262,6 +280,16 @@
 			}
 			else qa_html_theme_base::form_button_data($button, $key, $style);
 		}
+
+		// vote button notice
+
+		function post_hover_button($post, $element, $value, $class)
+		{
+				$ourid = qa_get_logged_in_userid();
+				if(strpos($class, 'vote-up') > 0 && qa_opt('ajax_comment_popup_notice') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && $this->content['q_view']['raw']['userid'] == $ourid)
+					$value.='" onmouseup="voteReminderNotice(this,'.$this->idx.')';
+			qa_html_theme_base::post_hover_button($post, $element, $value, $class);
+		}
 		
 	// worker functions
 		
@@ -320,7 +348,7 @@
 			
 			if(qa_opt('ajax_comment_answer_reminder') && !$this->content['q_view']['raw']['selchildid'] && isset($answerid) && $this->content['q_view']['raw']['userid'] == $ourid && @$this->content['a_list']['as'][$this->idx-1]['raw']['userid'] != $ourid) {
 				$form['fields']['custom_message'] = array(
-						'note' => qa_opt('ajax_comment_answer_reminder_text'),
+						'note' => '<div class="ajax-comment-reminder">'.qa_opt('ajax_comment_answer_reminder_text').'</div>',
 						'type' => 'static',
 				);
 				

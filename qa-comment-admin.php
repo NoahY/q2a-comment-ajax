@@ -5,7 +5,8 @@
 		case 'ajax_comment_format':
 		    return 0;
 		case 'ajax_comment_answer_reminder_text':
-		    return '<div class="ajax-comment-reminder">Remember, you can accept an answer by clicking the star in the top right corner.</div>';
+		case 'ajax_comment_popup_notice_text':
+		    return 'Remember, you can accept an answer as "best" by clicking the star in the top right corner.';
 		default:
 		    return null;
 	    }
@@ -29,6 +30,8 @@
 		qa_opt('ajax_comment_flash_star',(bool)qa_post_text('ajax_comment_flash_star'));
 		qa_opt('ajax_comment_answer_reminder',(bool)qa_post_text('ajax_comment_answer_reminder'));
 		qa_opt('ajax_comment_answer_reminder_text',qa_post_text('ajax_comment_answer_reminder_text'));
+		qa_opt('ajax_comment_popup_notice',(bool)qa_post_text('ajax_comment_popup_notice'));
+		qa_opt('ajax_comment_popup_notice_text',qa_post_text('ajax_comment_popup_notice_text'));
                 $ok = 'Settings Saved.';
 
             }
@@ -90,7 +93,21 @@
                 'value' => (int)qa_opt('ajax_comment_flash_star'),
                 'type' => 'checkbox',
             );
-
+            
+	    $fields[] = array(
+                'label' => 'Show reminder pop-up if if voting up answer to own question',
+                'tags' => 'NAME="ajax_comment_popup_notice" onclick="if(this.checked) jQuery(\'#ajax_comment_popup_notice_text\').fadeIn(); else jQuery(\'#ajax_comment_popup_notice_text\').fadeOut();"',
+                'value' => (int)qa_opt('ajax_comment_popup_notice'),
+                'type' => 'checkbox',
+            );
+            
+            
+            $fields[] = array(
+                'tags' => 'id="ajax_comment_popup_notice_text" name="ajax_comment_popup_notice_text" style="display:'.(qa_opt('ajax_comment_popup_notice')?'block':'none').'"',
+                'value' => qa_html(qa_opt('ajax_comment_popup_notice_text')),
+                'type' => 'text',
+            );
+            
             return array(           
                 'ok' => ($ok && !isset($error)) ? $ok : null,
                     
