@@ -286,7 +286,7 @@
 		function post_hover_button($post, $element, $value, $class)
 		{
 				$ourid = qa_get_logged_in_userid();
-				if(strpos($class, 'vote-up') > 0 && qa_opt('ajax_comment_popup_notice') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && $this->content['q_view']['raw']['userid'] == $ourid)
+				if(isset($this->content['q_view']) && strpos($class, 'vote-up') > 0 && qa_opt('ajax_comment_popup_notice') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && $this->content['q_view']['raw']['userid'] == $ourid)
 					$value.='" onmouseup="voteReminderNotice(this,'.$this->idx.')';
 			qa_html_theme_base::post_hover_button($post, $element, $value, $class);
 		}
