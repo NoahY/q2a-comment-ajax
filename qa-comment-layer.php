@@ -172,18 +172,15 @@
 
 		function q_view_main($q_view)
 		{
-			if (qa_opt('ajax_comment_enable') && isset($q_view['content']) && !$this->qa_state) {
-				
-				if (!empty($q_view['content'])){
-					$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader
-					$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
-				}
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
+				$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader
+				$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
 			}
 			qa_html_theme_base::q_view_main($q_view);
 		}
 		function a_item_main($a_item)
 		{
-			if (qa_opt('ajax_comment_enable') && isset($a_item['content']) && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
 				$switch = @$a_item['c_form'];
 				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
 				$a_item['c_form_2'] = @$switch;
@@ -193,19 +190,13 @@
 		}
 		function form($form)
 		{
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
-				if (!empty($form)) {
-					if(isset($form['ajax_comment'])) {
-						unset($form['ajax_comment']);
-						$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
-					
-						qa_html_theme_base::form($form);
-						
-						$this->output('</div>');
-					}
-					else qa_html_theme_base::form($form);
-				}
-				else qa_html_theme_base::form($form);
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && !empty($form) && isset($form['ajax_comment'])) {
+				unset($form['ajax_comment']);
+				$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
+			
+				qa_html_theme_base::form($form);
+				
+				$this->output('</div>');
 			}
 			else qa_html_theme_base::form($form);
 		}
