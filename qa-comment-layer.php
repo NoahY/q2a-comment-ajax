@@ -173,7 +173,7 @@
 		function q_view_main($q_view)
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
-				$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader
+				$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader gif
 				$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
 			}
 			qa_html_theme_base::q_view_main($q_view);
@@ -307,6 +307,7 @@
 						$editor->get_field($qa_content, @$incomment, @$informat, 'comment', 4, true),
 						array(
 							'error' => qa_html(@$errors['content']),
+							'rows' => 12,
 						)
 					),
 				),
