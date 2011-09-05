@@ -307,7 +307,7 @@
 						$editor->get_field($qa_content, @$incomment, @$informat, 'comment', 4, true),
 						array(
 							'error' => qa_html(@$errors['content']),
-							'rows' => 12,
+							'rows' => 8,
 						)
 					),
 				),
