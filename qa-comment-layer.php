@@ -19,6 +19,7 @@
 		
 		function doctype()
 		{
+			qa_error_log($this->content);
 			global $qa_state;
 			$this->qa_state = $qa_state;
 			if(!isset($_POST['ajax_comment_content'])) qa_html_theme_base::doctype();
@@ -78,20 +79,25 @@
 			jQuery('<div class=\"ajax-comment-vote-popup\" onclick=\"this.style.display=\\'none\\';\">".qa_html(qa_opt('ajax_comment_popup_notice_text'))."</div>').insertAfter(elem.parentNode.parentNode).fadeIn('fast').delay(8000).fadeOut('slow');
 		}
 	
+		var ajax_comment_position = 0;
+		var ajax_comment_id = 0;
 		var ajax_comment_height = 0;
 		function toggleComment(idx,username,flash) {
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').attr('disabled', 'disabled');
-			jQuery('.ajax-comment:not(#ajax-comment-'+idx+')').hide('slow');
+			jQuery('.ajax-comment').hide('slow');
 			
 			if(idx === false) {
 				jQuery('textarea#comment').val('');
 				return false;
 			}
-			
 			var cDiv = jQuery('#ajax-comment-'+idx);
-			cDiv.removeAttr('disabled');
 			
 			if(cDiv.length) {
+				if(ajax_comment_position != idx) {
+					cDiv.append(jQuery('#ajax-comment-'+ajax_comment_position).html());
+					jQuery('#ajax-comment-'+ajax_comment_position).html('');
+					ajax_comment_position = idx;
+				}
+
 				if(!cDiv.is(':visible')) {
 					
 					// flash star
@@ -129,37 +135,37 @@
 				}
 			}
 		}
-		function ajaxPost(idx,id) {
-			var cText = jQuery('#ajax-comment-'+idx+' textarea#comment');
+		function ajaxPost() {
+			var cText = jQuery('#ajax-comment-'+ajax_comment_position+' textarea#comment');
 			var content = cText.val();
-
-			var notify = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"notify\"]').attr('checked');
-			var email = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"email\"]').val();
-			var editor = jQuery('#ajax-comment-'+(idx+1)+' input[name=\"editor\"]').val();
+			
+			var notify = jQuery('#ajax-comment-'+(ajax_comment_position)+' input[name=\"notify\"]').attr('checked');
+			var email = jQuery('#ajax-comment-'+(ajax_comment_position)+' input[name=\"email\"]').val();
+			var editor = jQuery('#ajax-comment-'+(ajax_comment_position)+' input[name=\"editor\"]').val();
 			var oldcss = cText.css('background');
 			cText.css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
 			cText.val('');
 			
-			var dataString = 'ajax_id='+idx+'&ajax_comment_content='+content+(id!==false?'&ajax_comment_id='+id:'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
-
+			var dataString = 'ajax_id='+ajax_comment_position+'&ajax_comment_content='+content+(ajax_comment_position!=0?'&ajax_comment_id='+document.getElementById('ajax-comment-'+ajax_comment_position).getAttribute('value'):'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
 			jQuery.ajax({  
 			  type: 'POST',  
 			  url: '".qa_self_html()."',  
 			  data: dataString,  
 			  success: function(data) {
+				data = data.substring(1);
 				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
 					cText.val(content);
 				}
-				else if(!idx) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.qa-q-view-main .ajax-comment').find('div.qa-c-list-item:last').show('slow');
+				else if(ajax_comment_position == 0) {
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow');
 					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow');
 					toggleComment(false);
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(idx-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('.ajax-comment:eq('+idx+')').find('div.qa-c-list-item:last').show('slow');
-					else jQuery('.qa-a-item-c-list').eq(idx-1).append(data).find('div.qa-c-list-item:last').show('slow');
+					if(jQuery('.qa-a-item-c-list').eq(ajax_comment_position-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow');
+					else jQuery('.qa-a-item-c-list').eq(ajax_comment_position-1).append(data).find('div.qa-c-list-item:last').show('slow');
 					toggleComment(false);
 				}
 				cText.css('background',oldcss);
@@ -174,7 +180,12 @@
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
 				$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader gif
-				$q_view['c_form'] = $this->qa_page_q_add_c_form(null);
+				$q_view['c_form'] = $this->qa_ajax_comment_form(null);
+				if(isset($q_view['a_form'])) {
+					$v = $q_view['a_form'];
+					$q_view['a_form'] = $q_view['c_form'];
+					$q_view['c_form'] = $v;
+				}
 			}
 			qa_html_theme_base::q_view_main($q_view);
 		}
@@ -182,7 +193,7 @@
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
 				$switch = @$a_item['c_form'];
-				$a_item['c_form'] = $this->qa_page_q_add_c_form($a_item['raw']['postid']);
+				$a_item['c_form'] = $this->qa_ajax_comment_form_shell($a_item['raw']['postid']);
 				$a_item['c_form_2'] = @$switch;
 			}
 			qa_html_theme_base::a_item_main($a_item);
@@ -191,8 +202,9 @@
 		function form($form)
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state && !empty($form) && isset($form['ajax_comment'])) {
+				
+				$this->output('<div class="ajax-comment" style="display:none" value="'.$form['ajax_comment'].'" id="ajax-comment-'.($this->idx++).'">');
 				unset($form['ajax_comment']);
-				$this->output('<div class="ajax-comment" style="display:none" id="ajax-comment-'.($this->idx++).'">');
 			
 				qa_html_theme_base::form($form);
 				
@@ -284,7 +296,12 @@
 		
 	// worker functions
 		
-		function qa_page_q_add_c_form($answerid)
+		function qa_ajax_comment_form_shell($answerid) {
+			$form['ajax_comment'] = $answerid;
+			return $form;
+		}
+
+		function qa_ajax_comment_form()
 	/*
 		Return form for adding a comment on $answerid (or the question if $answerid is null), and set up $qa_content accordingly
 	*/
@@ -314,7 +331,7 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'NAME="'.(isset($answerid) ? ('docommentadda_'.$answerid) : 'docommentaddq').'" onclick="ajaxPost('.$this->idx2.','.($answerid?$answerid:'false').')"',
+						'tags' => 'onclick="ajaxPost()"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => $this->idx2,
 					),
@@ -353,7 +370,7 @@
 				qa_set_up_captcha_field($qa_content, $form['fields'], @$errors,
 					qa_insert_login_links(qa_lang_html(isset($qa_login_userid) ? 'misc/captcha_confirm_fix' : 'misc/captcha_login_fix')));
 					
-			$form['ajax_comment'] = 1;
+			$form['ajax_comment'] = 0;
 			$this->idx2++;
 			return $form;
 		}
@@ -437,8 +454,8 @@
 					}
 					break;
 			}
-			if($pageerror) $this->output('### '.$pageerror);
-			else if(!empty($errors)) $this->output('### '.implode(',',$errors));
+			if($pageerror) $this->output_raw('### '.$pageerror);
+			else if(!empty($errors)) $this->output_raw('### '.implode(',',$errors));
 			else {
 				
 			// return c_item
