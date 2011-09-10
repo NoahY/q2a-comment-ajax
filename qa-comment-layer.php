@@ -19,7 +19,6 @@
 		
 		function doctype()
 		{
-			qa_error_log($this->content);
 			global $qa_state;
 			$this->qa_state = $qa_state;
 			if(!isset($_POST['ajax_comment_content'])) qa_html_theme_base::doctype();
