@@ -134,7 +134,7 @@
 				}
 			}
 		}
-		function ajaxPost() {
+		function ajaxPostComment() {
 			var cText = jQuery('#ajax-comment-'+ajax_comment_position+' textarea#comment');
 			var content = cText.val();
 			
@@ -151,7 +151,6 @@
 			  url: '".qa_self_html()."',  
 			  data: dataString,  
 			  success: function(data) {
-				data = data.substring(1);
 				if(/^###/.exec(data)) {
 					var error = data.substring(4);
 					window.alert(error);
@@ -330,7 +329,7 @@
 				
 				'buttons' => array(
 					'comment' => array(
-						'tags' => 'onclick="ajaxPost()"',
+						'tags' => 'onclick="ajaxPostComment()"',
 						'label' => qa_lang_html('question/add_comment_button'),
 						'ajax_comment' => $this->idx2,
 					),
