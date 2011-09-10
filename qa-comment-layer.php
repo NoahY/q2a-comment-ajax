@@ -26,7 +26,6 @@
 
 		function html()
 		{
-			
 			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment(qa_post_text('ajax_comment_content'),(isset($_POST['ajax_comment_id'])?qa_post_text('ajax_comment_id'):null));
 			else qa_html_theme_base::html();
 		}
@@ -151,8 +150,8 @@
 			  url: '".qa_self_html()."',  
 			  data: dataString,  
 			  success: function(data) {
-				if(/^###/.exec(data)) {
-					var error = data.substring(4);
+				if(/^[\\t\\n ]*###/.exec(data)) {
+					var error = data.replace(/^[\\t\\n ]*### */,'');
 					window.alert(error);
 					cText.val(content);
 				}
@@ -424,7 +423,6 @@
 						$informat = $formats[qa_opt('ajax_comment_format')];
 						
 						$errors=qa_comment_validate($incomment, $informat, $intext, $innotify, $inemail);
-						
 						if ($usecaptcha)
 							qa_captcha_validate($_POST, $errors);
 		
