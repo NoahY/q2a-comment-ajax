@@ -156,12 +156,15 @@
 					cText.val(content);
 				}
 				else if(ajax_comment_position == 0) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow');
-					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow');
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').".($this->poll?"insertAfter('.qa-a-list')":"insertBefore('#ajax-comment-'+ajax_comment_position)").".find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
+					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
 					toggleComment(false);
 				}
 				else {
-					if(jQuery('.qa-a-item-c-list').eq(ajax_comment_position-1).length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow');
+					if(!document.getElementById('ajax-comment-'+ajax_comment_position).getAttribute('comments')) {
+						document.getElementById('ajax-comment-'+ajax_comment_position).setAttribute('comments','true');
+						jQuery('<div class=\"qa-a-item-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow');
+					}
 					else jQuery('.qa-a-item-c-list').eq(ajax_comment_position-1).append(data).find('div.qa-c-list-item:last').show('slow');
 					toggleComment(false);
 				}
@@ -169,6 +172,14 @@
 			  }  
 			});
 		}
+		
+		function slideToDiv(div) {
+			var cDiv = jQuery(div);
+			if(cDiv.length) {
+				jQuery('html').animate({scrollTop:(cDiv.offset().top-jQuery(window).height()+cDiv.height()+20)+'px'},{queue:false, duration:600, easing: 'swing'});
+			}			
+		}
+		
 	</script>");
 			}
 		}
@@ -190,7 +201,7 @@
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
 				$switch = @$a_item['c_form'];
-				$a_item['c_form'] = $this->qa_ajax_comment_form_shell($a_item['raw']['postid']);
+				$a_item['c_form'] = $this->qa_ajax_comment_form_shell($a_item['raw']['postid'],isset($a_item['c_list']));
 				$a_item['c_form_2'] = @$switch;
 			}
 			qa_html_theme_base::a_item_main($a_item);
@@ -200,8 +211,9 @@
 		{
 			if (qa_opt('ajax_comment_enable') && !$this->qa_state && !empty($form) && isset($form['ajax_comment'])) {
 				
-				$this->output('<div class="ajax-comment" style="display:none" value="'.$form['ajax_comment'].'" id="ajax-comment-'.($this->idx++).'">');
+				$this->output('<div class="ajax-comment"'.(isset($form['ajax_comment_comments'])?' comments="true"':'').' style="display:none" value="'.$form['ajax_comment'].'" id="ajax-comment-'.($this->idx++).'">');
 				unset($form['ajax_comment']);
+				unset($form['ajax_comment_comments']);
 			
 				qa_html_theme_base::form($form);
 				
@@ -293,8 +305,9 @@
 		
 	// worker functions
 		
-		function qa_ajax_comment_form_shell($answerid) {
+		function qa_ajax_comment_form_shell($answerid,$comments=false) {
 			$form['ajax_comment'] = $answerid;
+			if($comments) $form['ajax_comment_comments'] = 1;
 			return $form;
 		}
 
