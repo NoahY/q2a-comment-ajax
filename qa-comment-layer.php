@@ -5,28 +5,22 @@
 		var $idx = 0;
 		var $idx2 = 0;
 		var $qa_state;
-
-		function option_default($option) {
-			
-			switch($option) {
-				default:
-					return false;
-			}
-			
-		}
+		
+		var $can_comment = false;
 		
 		// check for post
 		
 		function doctype()
 		{
+			$this->can_comment = (qa_user_permit_error('permit_post_c') == false);
 			global $qa_state;
 			$this->qa_state = $qa_state;
-			if(!isset($_POST['ajax_comment_content'])) qa_html_theme_base::doctype();
+			if(!isset($_POST['ajax_comment_content']) || !$this->can_comment) qa_html_theme_base::doctype();
 		}
 
 		function html()
 		{
-			if(isset($_POST['ajax_comment_content'])) $this->ajaxPostComment(qa_post_text('ajax_comment_content'),(isset($_POST['ajax_comment_id'])?qa_post_text('ajax_comment_id'):null));
+			if(isset($_POST['ajax_comment_content']) && $this->can_comment) $this->ajaxPostComment(qa_post_text('ajax_comment_content'),(isset($_POST['ajax_comment_id'])?qa_post_text('ajax_comment_id'):null));
 			else qa_html_theme_base::html();
 		}
 		
@@ -35,7 +29,7 @@
 		function head_script()
 		{
 			qa_html_theme_base::head_script();
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state && $this->template == 'question') {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && $this->template == 'question' && $this->can_comment) {
 				$this->output_raw("
 	<style>
 		.ajax-comment-hidden {
@@ -186,7 +180,7 @@
 
 		function q_view_main($q_view)
 		{
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && $this->can_comment) {
 				$this->output('<img style="display:none" src="'.QA_HTML_THEME_LAYER_URLTOROOT.'ajax-loader.gif" />'); // this preloads the ajax loader gif
 				$q_view['c_form'] = $this->qa_ajax_comment_form(null);
 				if(isset($q_view['a_form'])) {
@@ -199,7 +193,7 @@
 		}
 		function a_item_main($a_item)
 		{
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && $this->can_comment) {
 				$switch = @$a_item['c_form'];
 				$a_item['c_form'] = $this->qa_ajax_comment_form_shell($a_item['raw']['postid'],isset($a_item['c_list']));
 				$a_item['c_form_2'] = @$switch;
@@ -209,7 +203,7 @@
 		}
 		function form($form)
 		{
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state && !empty($form) && isset($form['ajax_comment'])) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && !empty($form) && isset($form['ajax_comment']) && $this->can_comment) {
 				
 				$this->output('<div class="ajax-comment"'.(isset($form['ajax_comment_comments'])?' comments="true"':'').' style="display:none" value="'.$form['ajax_comment'].'" id="ajax-comment-'.($this->idx++).'">');
 				unset($form['ajax_comment']);
@@ -226,7 +220,7 @@
 		
 		function q_view_buttons($q_view)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($q_view['form']['buttons']['comment']) && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($q_view['form']['buttons']['comment']) && !$this->qa_state && $this->can_comment) {
 
 				$handle = $this->getHandleFromId($q_view['raw']['userid']);
 				$q_view['form']['buttons']['comment']['comment_username'] = $handle;
@@ -236,7 +230,7 @@
 		
 		function a_item_buttons($a_item)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($a_item['form']['buttons']['comment']) && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($a_item['form']['buttons']['comment']) && !$this->qa_state && $this->can_comment) {
 
 				$handle = $this->getHandleFromId($a_item['raw']['userid']);
 				$a_item['form']['buttons']['comment']['comment_username'] = $handle;
@@ -246,7 +240,7 @@
 		
 		function c_item_buttons($c_item)
 		{
-			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['form']['buttons']['comment']) && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && qa_opt('ajax_comment_username') && isset($c_item['form']['buttons']['comment']) && !$this->qa_state && $this->can_comment) {
 				$handle = $this->getHandleFromId($c_item['raw']['userid']);
 				$c_item['form']['buttons']['comment']['comment_username'] = $handle;
 			}
@@ -255,7 +249,7 @@
 		
 		function form_button_data($button, $key, $style)
 		{
-			if (qa_opt('ajax_comment_enable') && !$this->qa_state) {
+			if (qa_opt('ajax_comment_enable') && !$this->qa_state && $this->can_comment) {
 				if($key === 'comment') {
 
 					// insert username
@@ -298,7 +292,7 @@
 		function post_hover_button($post, $element, $value, $class)
 		{
 				$ourid = qa_get_logged_in_userid();
-				if(isset($this->content['q_view']) && strpos($class, 'vote-up') > 0 && qa_opt('ajax_comment_popup_notice') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && $this->content['q_view']['raw']['userid'] == $ourid)
+				if(isset($this->content['q_view']) && strpos($class, 'vote-up') > 0 && qa_opt('ajax_comment_popup_notice') && !$this->content['q_view']['raw']['selchildid'] && $this->idx > 0 && $this->content['q_view']['raw']['userid'] == $ourid && $this->can_comment)
 					$value.='" onmouseup="voteReminderNotice(this,'.$this->idx.')';
 			qa_html_theme_base::post_hover_button($post, $element, $value, $class);
 		}
