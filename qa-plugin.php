@@ -4,7 +4,7 @@
         Plugin Name: Ajax Comment Form
         Plugin URI: https://github.com/NoahY/q2a-comment-ajax
         Plugin Description: Ajax comment submission form
-        Plugin Version: 0.4
+        Plugin Version: 1.0b
         Plugin Date: 2011-08-14
         Plugin Author: NoahY
         Plugin Author URI:                              
