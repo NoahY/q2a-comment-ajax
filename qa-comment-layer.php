@@ -150,7 +150,8 @@
 					cText.val(content);
 				}
 				else if(ajax_comment_position == 0) {
-					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').".(@$this->poll?"insertAfter('.qa-a-list')":"insertBefore('#ajax-comment-'+ajax_comment_position)").".find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
+					alert(0);
+					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
 					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
 					toggleComment(false);
 				}
@@ -159,7 +160,9 @@
 						document.getElementById('ajax-comment-'+ajax_comment_position).setAttribute('comments','true');
 						jQuery('<div class=\"qa-a-item-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow');
 					}
-					else jQuery('.qa-a-item-c-list').eq(ajax_comment_position-1).append(data).find('div.qa-c-list-item:last').show('slow');
+					else {
+						jQuery('.ajax-comment-idx-'+ajax_comment_position).append(data).find('div.qa-c-list-item:last').show('slow');
+					}
 					toggleComment(false);
 				}
 				cText.css('background',oldcss);
@@ -236,6 +239,12 @@
 				$a_item['form']['buttons']['comment']['comment_username'] = $handle;
 			}
 			qa_html_theme_base::a_item_buttons($a_item);
+		}
+
+		function c_list($c_list, $class)
+		{
+			$class = 'ajax-comment-idx-'.$this->idx.' '.$class;
+			qa_html_theme_base::c_list($c_list, $class);
 		}
 		
 		function c_item_buttons($c_item)
