@@ -150,7 +150,6 @@
 					cText.val(content);
 				}
 				else if(ajax_comment_position == 0) {
-					alert(0);
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
 					else jQuery('.qa-q-view-c-list').append(data).find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
 					toggleComment(false);
