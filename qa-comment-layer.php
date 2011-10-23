@@ -135,8 +135,8 @@
 			var email = jQuery('#ajax-comment-'+(ajax_comment_position)+' input[name=\"email\"]').val();
 			var editor = jQuery('#ajax-comment-'+(ajax_comment_position)+' input[name=\"editor\"]').val();
 			var oldcss = cText.css('background');
-			cText.css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center white');
-			cText.val('');
+			cText.css('background','url(".QA_HTML_THEME_LAYER_URLTOROOT."ajax-loader.gif) no-repeat scroll center center silver');
+			//cText.val('');
 			
 			var dataString = 'ajax_id='+ajax_comment_position+'&ajax_comment_content='+content+(ajax_comment_position!=0?'&ajax_comment_id='+document.getElementById('ajax-comment-'+ajax_comment_position).getAttribute('value'):'')+(notify?'&notify='+notify:'')+(email?'&email='+email:'')+(editor?'&editor='+editor:'');  
 			jQuery.ajax({  
@@ -147,7 +147,7 @@
 				if(/^[\\t\\n ]*###/.exec(data)) {
 					var error = data.replace(/^[\\t\\n ]*### */,'');
 					window.alert(error);
-					cText.val(content);
+					//cText.val(content);
 				}
 				else if(ajax_comment_position == 0) {
 					if(jQuery('.qa-q-view-c-list').length == 0) jQuery('<div class=\"qa-q-view-c-list\">'+data+'</div>').insertBefore('#ajax-comment-'+ajax_comment_position).find('div.qa-c-list-item:last').show('slow',function () {slideToDiv('.qa-q-view-c-list')});
